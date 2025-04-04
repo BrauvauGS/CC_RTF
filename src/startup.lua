@@ -12,10 +12,6 @@ if jsonFileContent then
     -- Lire tout le contenu du fichier téléchargé
     local jsonData = jsonFileContent.readAll()
 
-    -- Afficher le contenu du fichier téléchargé pour débugger
-    print("Contenu du fichier JSON récupéré : ")
-    print(jsonData)
-
     -- Parser le JSON en une table Lua, en gérant les valeurs null et les tableaux vides
     local versions = textutils.unserializeJSON(jsonData, { parse_null = true, parse_empty_array = false })
 
@@ -33,6 +29,22 @@ else
     -- Si l'URL n'a pas été accessible, afficher une erreur
     printError("Erreur lors du téléchargement de versions.json")
 end
+
+        -- Télécharger le fichier de l'OS
+        print("Téléchargement de l'OS...")
+        local osURL = versions.os.url
+        local osContent = http.get(osURL)
+
+        if osContent then
+            local osFile = fs.open("RTF_os.lua", "w")
+            osFile.write(osContent.readAll())
+            osFile.close()
+            print("OS téléchargé avec succès.")
+        else
+            printError("Erreur lors du téléchargement de l'OS.")
+        end
+
+
 -- Bootloader pour CC:Tweaked
 local OS_FILE = "RTF_os.lua"
 local BOOTLOADER_VERSION = "V0.1"
@@ -65,9 +77,7 @@ term.setTextColor(colors.green)
 -- Splash screen
 term.setTextColor(colors.cyan)
 print("*************************")
---print("*                       *")
 print("*  RTF Bootloader " .. BOOTLOADER_VERSION.. "  *")
---print("*                       *")
 print("*************************")
 print()
 term.setTextColor(colors.white)

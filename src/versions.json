@@ -1,11 +1,11 @@
 {
     "bootloader": {
       "version": "1.0.0",
-      "url": "https://example.com/bootloader.lua"
+      "url": "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/main/src/startup.lua"
     },
     "os": {
       "version": "1.0.0",
-      "url": "https://example.com/os.lua"
+      "url": "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/main/src/RTF_OS/RTF_os.lua"
     }
-  }
+}
   
