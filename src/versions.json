@@ -1,48 +1,11 @@
 {
     "bootloader": {
-        "version": "1.0.0",
-        "url": "https://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@github.com/BrauvauGS/CC_RTF/raw/main/src/startup.lua"
+      "version": "1.0.0",
+      "url": "https://example.com/bootloader.lua"
     },
     "os": {
-        "version": "1.0.0",
-        "url": "https://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@github.com/BrauvauGS/CC_RTF/raw/main/src/RTF_OS/RTF_os.lua"
-    },
-    "apps": {
-        "common": {
-            "help": {
-                "version": "1.0.0",
-                "url": "https://github.com/BrauvauGS/CC_RTF/raw/main/src/apps/common/help.app",
-            }
-        },
-        "turtle": {
-            "mine": {
-                "version": "1.3.0",
-                "url": "https://github.com/BrauvauGS/CC_RTF/raw/main/src/apps/turtle/mine.app",
-            }
-        },
-        "computer": {
-            "system_info": {
-                "version": "1.0.0",
-                "url": "https://github.com/BrauvauGS/CC_RTF/raw/main/src/apps/computer/system_info.app",
-            }
-        },
-        "advanced_computer": {
-            "advanced_mining": {
-                "version": "2.0.0",
-                "url": "https://github.com/BrauvauGS/CC_RTF/raw/main/src/apps/advanced_computer/advanced_mining.app",
-            }
-        },
-        "pocket": {
-            "info": {
-                "version": "1.0.0",
-                "url": "https://github.com/BrauvauGS/CC_RTF/raw/main/src/apps/pocket/info.app",
-            }
-        },
-        "advanced_pocket": {
-            "pocket_mining": {
-                "version": "1.2.0",
-                "url": "https://github.com/BrauvauGS/CC_RTF/raw/main/src/apps/advanced_pocket/pocket_mining.app",
-            }
-        }
+      "version": "1.0.0",
+      "url": "https://example.com/os.lua"
     }
-}
+  }
+  
