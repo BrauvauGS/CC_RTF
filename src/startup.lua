@@ -19,12 +19,8 @@ if jsonFileContent then
     if versions then
         -- Afficher la version du bootloader
         print("Version du Bootloader : " .. versions.bootloader.version)
-
         -- Afficher la version de l'OS
         print("Version de l'OS : " .. versions.os.version)
-    else
-        printError("Erreur lors du parsing du fichier JSON")
-    end
 
         -- Télécharger le fichier de l'OS
         print("Téléchargement de l'OS...")
@@ -40,12 +36,14 @@ if jsonFileContent then
             printError("Erreur lors du téléchargement de l'OS.")
         end
 
-
-
+    else
+        printError("Erreur lors du parsing du fichier JSON")
+    end
 else
     -- Si l'URL n'a pas été accessible, afficher une erreur
     printError("Erreur lors du téléchargement de versions.json")
 end
+
 
 -- Bootloader pour CC:Tweaked
 local OS_FILE = "RTF_os.lua"
