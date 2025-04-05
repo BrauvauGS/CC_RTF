@@ -5,13 +5,14 @@ term.setCursorPos(1,1)
 
 local jsonURL = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/main/src/versions.json"
 
+
 -- Télécharger le fichier versions.json
 local jsonFileContent = http.get(jsonURL)
 
 if jsonFileContent then
     -- Lire tout le contenu du fichier téléchargé
     local jsonData = jsonFileContent.readAll()
-
+    print(jsonData)
     -- Parser le JSON en une table Lua, en gérant les valeurs null et les tableaux vides
     local versions = textutils.unserializeJSON(jsonData, { parse_null = true, parse_empty_array = false })
 
@@ -45,8 +46,7 @@ else
 end
 
 
--- Bootloader pour CC:Tweaked
-local OS_FILE = "RTF_os.lua"
+
 local BOOTLOADER_VERSION = "V0.1"
 
 local platforms = {
@@ -125,4 +125,4 @@ term.setTextColor(colors.white)
 print("\n")
 
 -- Charge et exécute le fichier OS
---shell.run(OS_FILE,detected_platform.id,detected_platform.name)
+shell.run(OS_FILE,detected_platform.id,detected_platform.name)
