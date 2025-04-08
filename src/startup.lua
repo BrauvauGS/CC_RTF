@@ -1,9 +1,9 @@
 term.clear()
 term.setCursorPos(1,1)
 
-local jsonURL = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/main/src/versions.json"
 local OS_FILE ="RTF_os"
 
+local jsonURL = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/system_updates.json"
 -- Telecharger le fichier versions.json
 local jsonFileContent = http.get(jsonURL)
 
@@ -17,7 +17,7 @@ if jsonFileContent then
     -- Verifier si le parsing a reussi
     if versions then
         -- Afficher la version du bootloader
-        print("Version du Bootloader : " .. versions.bootloader.version)
+        term.write("Bootloader : " .. versions.bootloader.version)
         -- Afficher la version de l'OS
         print("Version de l'OS : " .. versions.os.version)
 
