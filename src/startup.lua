@@ -1,50 +1,12 @@
 term.clear()
-term.setCursorPos(1,1)
+term.setCursorPos(1, 1)
 
-local OS_FILE ="RTF_os"
-
+-- Variables globales
+local BOOTLOADER_VERSION = "V0.1.0"
+local OS_FILE = "src/RTF_OS/RTF_os.lua"
 local jsonURL = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/system_updates.json"
--- Telecharger le fichier versions.json
-local jsonFileContent = http.get(jsonURL)
 
-if jsonFileContent then
-    -- Lire tout le contenu du fichier telecharge
-    local jsonData = jsonFileContent.readAll()
-
-    -- Parser le JSON en une table Lua, en gerant les valeurs null et les tableaux vides
-    local versions = textutils.unserializeJSON(jsonData, { parse_null = true, parse_empty_array = false })
-
-    -- Verifier si le parsing a reussi
-    if versions then
-        -- Afficher la version du bootloader
-        term.write("Bootloader : " .. versions.bootloader.version)
-        -- Afficher la version de l'OS
-        print("Version de l'OS : " .. versions.os.version)
-
-        -- Telecharger le fichier de l'OS
-        print("Telechargement de l'OS...")
-        local osURL = versions.os.url
-        local osContent = http.get(osURL)
-
-        if osContent then
-            local osFileHandler = fs.open(OS_FILE, "w")
-            osFileHandler.write(osContent.readAll())
-            osFileHandler.close()
-            print("OS telecharge avec succes.")
-        else
-            printError("Erreur lors du telechargement de l'OS.")
-        end
-
-    else
-        printError("Erreur lors du parsing du fichier JSON")
-    end
-else
-    -- Si l'URL n'a pas ete accessible, afficher une erreur
-    printError("Erreur lors du telechargement de versions.json")
-end
-
-local BOOTLOADER_VERSION = "V0.1"
-
+-- Table des plateformes
 local platforms = {
     COMPUTER = {id = 1, name = "Computer"},
     ADVANCED_COMPUTER = {id = 2, name = "Advanced_Computer"},
@@ -55,65 +17,137 @@ local platforms = {
     COMMAND_COMPUTER = {id = 7, name = "Command_Computer"}
 }
 
--- Detection de la plateforme
-local isAdvanced = term.isColor()
-local isPocket = pocket ~= nil
-local isTurtle = turtle ~= nil
-local isCommand = commands ~= nil
-
--- Detection automatique de la plateforme
-local detected_platform = platforms.COMPUTER  -- Valeur par defaut (Ordinateur standard)
-
--- Affichage du nom et de l'ID de la plateforme detectee
-term.setTextColor(colors.green)
-
--- Splash screen
-term.setTextColor(colors.cyan)
-print("*************************")
-print("*  RTF Bootloader " .. BOOTLOADER_VERSION.. "  *")
-print("*************************")
-print()
-term.setTextColor(colors.white)
-
-if isCommand then
-    detected_platform = platforms.COMMAND_COMPUTER
-elseif isTurtle then
-    if isAdvanced then
-        detected_platform = platforms.ADVANCED_TURTLE
+-- Fonction de telechargement avec reprise en cas d'echec
+local function downloadFile(url, destination)
+    local fileContent = http.get(url)
+    if fileContent then
+        local fileHandler = fs.open(destination, "w")
+        fileHandler.write(fileContent.readAll())
+        fileHandler.close()
     else
-        detected_platform = platforms.TURTLE
-    end
-elseif isPocket then
-    if isAdvanced then
-        detected_platform = platforms.ADVANCED_POCKET
-    else
-        detected_platform = platforms.POCKET
-    end
-else
-    if isAdvanced then
-        detected_platform = platforms.ADVANCED_COMPUTER
-    else
-        detected_platform = platforms.COMPUTER
+        printError("Erreur lors du telechargement de " .. url)
     end
 end
-print("Hardware: " .. detected_platform.name)
 
--- Verifie si le fichier OS existe et est un fichier valide
-if not fs.exists(OS_FILE) or fs.isDir(OS_FILE)  then
-    printError("Erreur : '" .. OS_FILE .. "' introuvable ou invalide.")
-    return
+-- Fonction pour telecharger et parser le fichier system_updates.json
+local function downloadAndParseJSON(url)
+    local jsonFileContent = http.get(url)
+    if jsonFileContent then
+        local jsonData = jsonFileContent.readAll()
+        local system_updates = textutils.unserializeJSON(jsonData, { parse_null = true, parse_empty_array = false })
+        if not system_updates then
+            printError("Erreur lors du parsing du fichier JSON")
+            return nil
+        end
+        return system_updates
+    else
+        printError("Erreur lors du telechargement de " .. url)
+        return nil
+    end
 end
 
--- Animation de chargement
-term.write("Chargement " .. OS_FILE .. " ")
-term.setTextColor(colors.cyan)
-
-for i = 1, 3 do
-    sleep(0.1)
-    term.write(".")
+-- Fonction pour verifier la connexion reseau
+local function isNetworkAvailable()
+    local response = http.get("https://www.google.com")  -- ou une autre URL fiable
+    if response then
+        response.close()  -- Assurez-vous de fermer la connexion après avoir vérifié
+        return true  -- Connexion disponible
+    else
+        return false  -- Pas de connexion reseau
+    end
 end
-term.setTextColor(colors.white)
-print("\n")
 
--- Charge et execute le fichier OS
-shell.run(OS_FILE,detected_platform.id,detected_platform.name)
+-- Fonction pour detecter la plateforme
+local function detectPlatform()
+    local isAdvanced = term.isColor()
+    local isPocket = pocket ~= nil
+    local isTurtle = turtle ~= nil
+    local isCommand = commands ~= nil
+
+    local detected_platform
+    if isCommand then
+        detected_platform = platforms.COMMAND_COMPUTER
+    elseif isTurtle then
+        if isAdvanced then
+            detected_platform = platforms.ADVANCED_TURTLE
+        else
+            detected_platform = platforms.TURTLE
+        end
+    elseif isPocket then
+        if isAdvanced then
+            detected_platform = platforms.ADVANCED_POCKET
+        else
+            detected_platform = platforms.POCKET
+        end
+    else
+        if isAdvanced then
+            detected_platform = platforms.ADVANCED_COMPUTER
+        else
+            detected_platform = platforms.COMPUTER
+        end
+    end
+    return detected_platform
+end
+
+-- Fonction pour afficher le splash screen
+local function showSplashScreen()
+    term.setTextColor(colors.cyan)
+    print("***************************")
+    print("*  RTF Bootloader " .. BOOTLOADER_VERSION .. "  *")
+    print("***************************")
+    term.setTextColor(colors.white)
+end
+
+-- Fonction pour creer la structure de dossiers
+local function createDirectories()
+    -- Cree le dossier src et ses sous-dossiers
+    if not fs.exists("src") then fs.makeDir("src") end
+    if not fs.exists("src/RTF_OS") then fs.makeDir("src/RTF_OS") end
+    if not fs.exists("src/APPS") then fs.makeDir("src/APPS") end
+end
+
+-- Fonction principale
+local function main()
+    -- Afficher le splash screen
+    showSplashScreen()
+
+    -- Detecter la plateforme
+    local detected_platform = detectPlatform()
+    term.setTextColor(colors.green)
+    print("Hardware: " .. detected_platform.name)
+
+    -- Verifier la connexion reseau
+    if isNetworkAvailable() then
+    else
+        printError("Aucune connexion reseau.")
+        return
+    end
+
+
+
+    -- Creer la structure de dossiers
+    createDirectories()
+
+    -- Telecharger et parser le fichier system_updates.json
+    local system_updates = downloadAndParseJSON(jsonURL)
+    if not system_updates then return end
+
+    -- Telecharger le fichier de l'OS
+    downloadFile(system_updates.os.url, OS_FILE)
+
+
+    -- Verifier si le fichier OS existe et est valide
+    if not fs.exists(OS_FILE) or fs.isDir(OS_FILE) then
+        printError("Erreur : '" .. OS_FILE .. "' introuvable ou invalide.")
+        return
+    end
+
+    term.setTextColor(colors.white)
+    print("\n")
+
+    -- Charger et executer le fichier OS
+    shell.run(OS_FILE, detected_platform.id, detected_platform.name)
+end
+
+-- Execution du programme principal
+main()
