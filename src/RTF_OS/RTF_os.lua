@@ -24,7 +24,11 @@ local function showBanner()
     term.setTextColor(colors.purple)
     write("LABEL: ")
     term.setTextColor(colors.cyan)
-    print("\" " .. os.getComputerLabel().." \"")
+    if os.getComputerLabel() ~= nil then 
+        print("\" " .. os.getComputerLabel().." \"")
+    else 
+        print("\" " .. "not define".." \"")
+    end
     term.setTextColor(colors.purple)
     print()
     term.setTextColor(colors.white)
