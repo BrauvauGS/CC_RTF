@@ -148,7 +148,9 @@ local function main()
     if not system_updates then return end
 
     local localVersions = getLocalVersions()
+    printError("localVersions : " .. localVersions.os)
     local osVersionRemote = system_updates.os.version
+    printError("osVersionRemote : " .. osVersionRemote)
     local osVersionLocal = localVersions.os or "0.0.0"
 
     -- Vérifier si une mise à jour est disponible
