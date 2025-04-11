@@ -18,7 +18,12 @@ local platforms = {
     COMMAND_COMPUTER = {id = 7, name = "Command_Computer"}
 }
 
--- Fonction pour comparer les versions
+-- Ajouter un cache buster à l'URL
+local function getCacheBustedURL(url)
+    return url .. "?t=" .. tostring(os.epoch("utc"))
+end
+
+-- Comparer les versions
 local function isNewerVersion(localVersion, remoteVersion)
     local function splitVersion(v)
         local major, minor, patch = v:match("(%d+)%.(%d+)%.(%d+)")
@@ -34,7 +39,7 @@ local function isNewerVersion(localVersion, remoteVersion)
     return false
 end
 
--- Fonction de telechargement
+-- Téléchargement de fichier
 local function downloadFile(url, destination)
     local fileContent = http.get(url)
     if fileContent then
@@ -46,7 +51,7 @@ local function downloadFile(url, destination)
     end
 end
 
--- Fonction pour telecharger et parser le fichier JSON
+-- Téléchargement et parsing du JSON
 local function downloadAndParseJSON(url)
     local jsonFileContent = http.get(url)
     if jsonFileContent then
@@ -63,7 +68,7 @@ local function downloadAndParseJSON(url)
     end
 end
 
--- Verifier la connexion reseau
+-- Vérifier la connexion réseau
 local function isNetworkAvailable()
     local response = http.get("https://www.google.com")
     if response then
@@ -74,27 +79,20 @@ local function isNetworkAvailable()
     end
 end
 
--- Detecter la plateforme
+-- Détecter la plateforme
 local function detectPlatform()
     local isAdvanced = term.isColor()
     local isPocket = pocket ~= nil
     local isTurtle = turtle ~= nil
     local isCommand = commands ~= nil
 
-    local detected_platform
-    if isCommand then
-        detected_platform = platforms.COMMAND_COMPUTER
-    elseif isTurtle then
-        detected_platform = isAdvanced and platforms.ADVANCED_TURTLE or platforms.TURTLE
-    elseif isPocket then
-        detected_platform = isAdvanced and platforms.ADVANCED_POCKET or platforms.POCKET
-    else
-        detected_platform = isAdvanced and platforms.ADVANCED_COMPUTER or platforms.COMPUTER
-    end
-    return detected_platform
+    if isCommand then return platforms.COMMAND_COMPUTER end
+    if isTurtle then return isAdvanced and platforms.ADVANCED_TURTLE or platforms.TURTLE end
+    if isPocket then return isAdvanced and platforms.ADVANCED_POCKET or platforms.POCKET end
+    return isAdvanced and platforms.ADVANCED_COMPUTER or platforms.COMPUTER
 end
 
--- Afficher splash screen
+-- Affichage du splash screen
 local function showSplashScreen()
     term.setTextColor(colors.cyan)
     print("***************************")
@@ -103,14 +101,14 @@ local function showSplashScreen()
     term.setTextColor(colors.white)
 end
 
--- Creation des dossiers
+-- Création des dossiers
 local function createDirectories()
     if not fs.exists("src") then fs.makeDir("src") end
     if not fs.exists("src/RTF_OS") then fs.makeDir("src/RTF_OS") end
     if not fs.exists("src/APPS") then fs.makeDir("src/APPS") end
 end
 
--- Charger la version locale depuis version.json
+-- Lire la version locale
 local function getLocalVersions()
     if fs.exists(VERSION_FILE) then
         local file = fs.open(VERSION_FILE, "r")
@@ -122,7 +120,7 @@ local function getLocalVersions()
     end
 end
 
--- Sauvegarder la version locale
+-- Enregistrer la version locale
 local function saveLocalVersions(data)
     local file = fs.open(VERSION_FILE, "w")
     file.write(textutils.serialize(data))
@@ -144,35 +142,39 @@ local function main()
 
     createDirectories()
 
-    local system_updates = downloadAndParseJSON(jsonURL)
+    -- Télécharger le JSON avec cache buster
+    local system_updates = downloadAndParseJSON(getCacheBustedURL(jsonURL))
     if not system_updates then return end
 
     local localVersions = getLocalVersions()
-    printError("localVersions : " .. localVersions.os)
     local osVersionRemote = system_updates.os.version
-    printError("osVersionRemote : " .. osVersionRemote)
     local osVersionLocal = localVersions.os or "0.0.0"
 
-    -- Vérifier si une mise à jour est disponible
+    -- Afficher pour debug
+    print("Version locale : " .. osVersionLocal)
+    print("Version distante : " .. osVersionRemote)
+
+    -- Mise à jour si nécessaire
     if isNewerVersion(osVersionLocal, osVersionRemote) or not fs.exists(OS_FILE) then
         print("Mise a jour de l'OS...")
 
-        -- Supprimer l'ancien fichier s'il existe
         if fs.exists(OS_FILE) then
             fs.delete(OS_FILE)
-            sleep(0.1) -- petite pause pour éviter bug d'accès disque
+            sleep(0.1)
         end
 
         downloadFile(system_updates.os.url, OS_FILE)
-
-        -- Sauvegarder la nouvelle version
         localVersions.os = osVersionRemote
         saveLocalVersions(localVersions)
+
+        print("Redemarrage pour appliquer la mise a jour...")
+        sleep(1)
+        os.reboot()
     else
         print("OS a jour. Version actuelle : " .. osVersionLocal)
     end
 
-    -- Lancer l'OS
+    -- Vérifier l'existence du fichier avant exécution
     if not fs.exists(OS_FILE) then
         printError("Erreur : fichier OS introuvable.")
         return
@@ -183,5 +185,5 @@ local function main()
     shell.run(OS_FILE, platform.id, platform.name)
 end
 
--- Execution
+-- Lancer le programme principal
 main()
