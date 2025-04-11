@@ -149,17 +149,16 @@ local function main()
 
     local localVersions = getLocalVersions()
     local osVersionRemote = system_updates.os.version
-    printError(system_updates.os.url)
     local osVersionLocal = localVersions.os or "0.0.0"
 
     -- Vérifier si une mise à jour est disponible
     if isNewerVersion(osVersionLocal, osVersionRemote) or not fs.exists(OS_FILE) then
-        print("Mise à jour de l'OS...")
+        print("Mise a jour de l'OS...")
         downloadFile(system_updates.os.url, OS_FILE)
         localVersions.os = osVersionRemote
         saveLocalVersions(localVersions)
     else
-        print("OS à jour. Version actuelle : " .. osVersionLocal)
+        print("OS a jour. Version actuelle : " .. osVersionLocal)
     end
 
     -- Lancer l'OS
