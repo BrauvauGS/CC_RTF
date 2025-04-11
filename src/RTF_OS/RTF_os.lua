@@ -6,7 +6,7 @@ local args = { ... }
 
 local OS_NAME = "RTF_OS"
 local OS_NAME_PROMPT = "RTF"
-local OS_VERSION = "0.1.4"
+local OS_VERSION = "0.1.5"
 local cwd = "/" -- Dossier courant
 local history = {} -- Historique des commandes
 
