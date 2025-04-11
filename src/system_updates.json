@@ -4,7 +4,7 @@
       "url": "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/startup.lua"
     },
     "os": {
-      "version": "0.1.2",
+      "version": "0.1.3",
       "url": "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/RTF_OS/RTF_os.lua"
     }
 

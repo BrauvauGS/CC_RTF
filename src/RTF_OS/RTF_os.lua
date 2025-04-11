@@ -6,7 +6,7 @@ local args = { ... }
 
 local OS_NAME = "RTF_OS"
 local OS_NAME_PROMPT = "RTF"
-local OS_VERSION = "0.1.2"
+local OS_VERSION = "0.1.3"
 local cwd = "/" -- Dossier courant
 local history = {} -- Historique des commandes
 
@@ -14,7 +14,7 @@ local history = {} -- Historique des commandes
 local function showBanner()
     term.setTextColor(colors.purple)
     print("**********************")
-    print("*   ".. OS_NAME .. " " .. OS_VERSION .. "   *")
+    print("*   ".. OS_NAME .. " " .. OS_VERSION .. "     *")
     print("**********************")
     write("ID:    ")
     term.setTextColor(colors.cyan)
