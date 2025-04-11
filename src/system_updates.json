@@ -1,6 +1,6 @@
 {
     "bootloader": {
-      "version": "0.2.0",
+      "version": "0.3.0",
       "url": "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/startup.lua"
     },
     "os": {

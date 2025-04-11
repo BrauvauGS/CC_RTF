@@ -2,7 +2,7 @@ term.clear()
 term.setCursorPos(1, 1)
 
 -- Variables globales
-local BOOTLOADER_VERSION = "0.2.0"
+local BOOTLOADER_VERSION = "0.3.0"
 local VERSION_FILE = "version.json"
 local OS_FILE = "src/RTF_OS/RTF_os.lua"
 local jsonURL = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/system_updates.json"
@@ -154,7 +154,16 @@ local function main()
     -- Vérifier si une mise à jour est disponible
     if isNewerVersion(osVersionLocal, osVersionRemote) or not fs.exists(OS_FILE) then
         print("Mise a jour de l'OS...")
+
+        -- Supprimer l'ancien fichier s'il existe
+        if fs.exists(OS_FILE) then
+            fs.delete(OS_FILE)
+            sleep(0.1) -- petite pause pour éviter bug d'accès disque
+        end
+
         downloadFile(system_updates.os.url, OS_FILE)
+
+        -- Sauvegarder la nouvelle version
         localVersions.os = osVersionRemote
         saveLocalVersions(localVersions)
     else
@@ -171,7 +180,6 @@ local function main()
     print("\nChargement de l'OS...\n")
     shell.run(OS_FILE, platform.id, platform.name)
 end
-
 
 -- Execution
 main()
