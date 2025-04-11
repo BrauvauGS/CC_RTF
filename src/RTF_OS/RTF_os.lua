@@ -5,6 +5,7 @@ term.setCursorPos(1,1)]]
 local args = { ... }
 
 local OS_NAME = "RTF_OS"
+
 local OS_NAME_PROMPT = "RTF"
 local OS_VERSION = "0.1.1"
 local cwd = "/" -- Dossier courant

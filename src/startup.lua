@@ -172,5 +172,6 @@ local function main()
     shell.run(OS_FILE, platform.id, platform.name)
 end
 
+
 -- Execution
 main()
