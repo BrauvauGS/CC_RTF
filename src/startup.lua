@@ -98,7 +98,7 @@ end
 local function showSplashScreen()
     term.setTextColor(colors.cyan)
     print("***************************")
-    print("*  RTF Bootloader " .. BOOTLOADER_VERSION .. "  *")
+    print("*  RTF Bootloader " .. BOOTLOADER_VERSION .. "   *")
     print("***************************")
     term.setTextColor(colors.white)
 end
