@@ -4,7 +4,7 @@ term.setCursorPos(1,1)]]
 -- Récupérer le nom de la plateforme passé en argument
 local args = { ... }
 
-local OS_NAME = "RTF_OS"
+local OS_NAME = "RTF_OS_T"
 local OS_NAME_PROMPT = "RTF"
 local OS_VERSION = "0.1.0"
 local cwd = "/" -- Dossier courant

@@ -149,6 +149,7 @@ local function main()
 
     local localVersions = getLocalVersions()
     local osVersionRemote = system_updates.os.version
+    printError(system_updates.os.url)
     local osVersionLocal = localVersions.os or "0.0.0"
 
     -- Vérifier si une mise à jour est disponible
