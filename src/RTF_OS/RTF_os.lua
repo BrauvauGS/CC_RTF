@@ -15,7 +15,7 @@ local history = {} -- Historique des commandes
 local function showBanner()
     term.setTextColor(colors.purple)
     print("**********************")
-    print("*   ".. OS_NAME .. " " .. OS_VERSION.. "   *")
+    print("*   ".. OS_NAME .. " " .. OS_VERSION .. "   *")
     print("**********************")
     write("ID:    ")
     term.setTextColor(colors.cyan)
