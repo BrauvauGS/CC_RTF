@@ -4,7 +4,7 @@ local osPath = "RTF/src/RTF_OS/RTF_os.lua"
 
 local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"
 local loggerPath = "RTF/src/Modules/logger.lua"
-local loggerModuleName = "RTF.src.Modules.logger"
+local loggerModuleName = "Modules.logger"
 
 local Logger
 local ConsolLog
