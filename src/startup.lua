@@ -1,6 +1,6 @@
 local url = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/bootloader.lua"
 local path = "RTF/bootloader.lua"
-local moduleName = "bootloader"
+local moduleName = "RTF/bootloader"
 
 -- Supprime l'ancien fichier s’il existe
 if fs.exists(path) then fs.delete(path) end

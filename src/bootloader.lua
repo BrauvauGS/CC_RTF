@@ -6,8 +6,8 @@ Bootloader.__index = Bootloader
 function Bootloader:new()
     local self = setmetatable({}, Bootloader)
 
-    self.BOOTLOADER_VERSION = "0.4.0"
-    self.VERSION_FILE = "version.json"
+    self.BOOTLOADER_VERSION = "0.5.0"
+    self.VERSION_FILE = "RTF/version.json"
     self.OS_FILE = "RTF/src/RTF_OS/RTF_os.lua"
     self.JSON_URL = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/system_updates.json"
 
@@ -101,8 +101,8 @@ end
 function Bootloader:createDirectories()
     if not fs.exists("RTF") then fs.makeDir("RTF") end
     if not fs.exists("RTF/src") then fs.makeDir("RTF/src") end
-    if not fs.exists("src/RTF_OS") then fs.makeDir("src/RTF_OS") end
-    if not fs.exists("src/APPS") then fs.makeDir("src/APPS") end
+    if not fs.exists("RTF/src/RTF_OS") then fs.makeDir("RTF/src/RTF_OS") end
+    if not fs.exists("RTF/src/APPS") then fs.makeDir("RTF/src/APPS") end
 end
 
 -- Lit la version locale
