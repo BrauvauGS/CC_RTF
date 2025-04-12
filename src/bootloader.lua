@@ -37,13 +37,7 @@ function boot()
     print("** RTF Bootloader **")
     createSystemDirectories()
 
-    local success = downloadFile(loggerUrl,loggerPath)
-    if success and fs.exists(loggerPath)  then 
-        local Logger = require(loggerPath)
-        local ConsolLog = Logger:new()
-        ConsolLog:log("system", "Logger Init ok")
-    else
-    end
+
 
     -- Download and run OS
     print("Downloading OS...")
@@ -59,5 +53,13 @@ function boot()
     end
 end
 
+local success = downloadFile(loggerUrl,loggerPath)
+if success and fs.exists(loggerPath)  then 
+    local Logger = require(loggerPath)
+    local ConsolLog = Logger:new()
+    ConsolLog:log("system", "Logger Init ok")
+else
+    
+end
 -- Start the bootloader
 boot()
