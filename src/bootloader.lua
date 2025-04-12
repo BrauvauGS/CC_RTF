@@ -6,7 +6,7 @@ local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads
 local loggerPath = "RTF/src/Modules/logger.lua"
 local loggerModuleName = "RTF.src.Modules.logger"
 
--- Create necessary directories
+-- Créer les répertoires nécessaires
 function createSystemDirectories()
     if not fs.exists("RTF") then fs.makeDir("RTF") end
     if not fs.exists("RTF/src") then fs.makeDir("RTF/src") end
@@ -15,7 +15,7 @@ function createSystemDirectories()
     if not fs.exists("RTF/src/Modules") then fs.makeDir("RTF/src/Modules") end
 end
 
--- Download a file
+-- Télécharger un fichier
 function downloadFile(url, destination)
     local fileContent = http.get(url)
     if fileContent then
@@ -24,12 +24,12 @@ function downloadFile(url, destination)
         fileHandler.close()
         return true
     else
-        printError("Error downloading " .. url)
+        printError("Erreur de téléchargement pour " .. url)
         return false
     end
 end
 
--- Main boot function
+-- Fonction principale de démarrage
 function boot()
     term.clear()
     term.setCursorPos(1, 1)
@@ -37,29 +37,32 @@ function boot()
     print("** RTF Bootloader **")
     createSystemDirectories()
 
+    -- Télécharger et initialiser le logger
+    print("Téléchargement du logger...")
+    if downloadFile(loggerUrl, loggerPath) then
+        print("Logger téléchargé avec succès.")
 
+        -- Charger le module logger
+        local Logger = require(loggerModuleName)
+        local ConsolLog = Logger:new()
+        ConsolLog:log("system", "Logger initialisé avec succès")
 
-    -- Download and run OS
-    print("Downloading OS...")
-    if downloadFile(osUrl, osPath) then
-        print("OS downloaded successfully.")
-        
-        -- Set platform: id = 1, name = "Advanced_Computer"
-        local platform = { id = 1, name = "Advanced_Computer" }
-        print("Running OS on platform: " .. platform.name)
-        shell.run(osPath, platform.id, platform.name)  -- Run OS with platform params
+        -- Télécharger et lancer l'OS
+        print("Téléchargement de l'OS...")
+        if downloadFile(osUrl, osPath) then
+            print("OS téléchargé avec succès.")
+
+            -- Définir la plateforme : id = 1, name = "Advanced_Computer"
+            local platform = { id = 1, name = "Advanced_Computer" }
+            print("Lancement de l'OS sur la plateforme : " .. platform.name)
+            shell.run(osPath, platform.id, platform.name)  -- Lancer l'OS avec les paramètres de plateforme
+        else
+            printError("Erreur de téléchargement de l'OS.")
+        end
     else
-        printError("Error downloading OS.")
+        printError("Erreur de téléchargement du logger.")
     end
 end
 
-local success = downloadFile(loggerUrl,loggerPath)
-if success and fs.exists(loggerPath)  then 
-    local Logger = require(loggerModuleName)
-    local ConsolLog = Logger:new()
-    ConsolLog:log("system", "Logger Init ok")
-else
-
-end
--- Start the bootloader
+-- Lancer le bootloader
 boot()
