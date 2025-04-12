@@ -42,22 +42,29 @@ function boot()
     if downloadFile(loggerUrl, loggerPath) then
         print("Logger téléchargé avec succès.")
 
-        -- Charger le module logger
-        local Logger = require(loggerModuleName)
-        local ConsolLog = Logger:new()
-        ConsolLog:log("system", "Logger initialisé avec succès")
+        -- Vérification si le fichier existe avant de le charger
+        if fs.exists(loggerPath) then
+            print("Le fichier logger.lua existe. Chargement du module.")
+            
+            -- Charger le module logger
+            local Logger = require(loggerModuleName)
+            local ConsolLog = Logger:new()
+            ConsolLog:log("system", "Logger initialisé avec succès")
 
-        -- Télécharger et lancer l'OS
-        print("Téléchargement de l'OS...")
-        if downloadFile(osUrl, osPath) then
-            print("OS téléchargé avec succès.")
+            -- Télécharger et lancer l'OS
+            print("Téléchargement de l'OS...")
+            if downloadFile(osUrl, osPath) then
+                print("OS téléchargé avec succès.")
 
-            -- Définir la plateforme : id = 1, name = "Advanced_Computer"
-            local platform = { id = 1, name = "Advanced_Computer" }
-            print("Lancement de l'OS sur la plateforme : " .. platform.name)
-            shell.run(osPath, platform.id, platform.name)  -- Lancer l'OS avec les paramètres de plateforme
+                -- Définir la plateforme : id = 1, name = "Advanced_Computer"
+                local platform = { id = 1, name = "Advanced_Computer" }
+                print("Lancement de l'OS sur la plateforme : " .. platform.name)
+                shell.run(osPath, platform.id, platform.name)  -- Lancer l'OS avec les paramètres de plateforme
+            else
+                printError("Erreur de téléchargement de l'OS.")
+            end
         else
-            printError("Erreur de téléchargement de l'OS.")
+            printError("Erreur : Le fichier logger.lua n'a pas été téléchargé.")
         end
     else
         printError("Erreur de téléchargement du logger.")
