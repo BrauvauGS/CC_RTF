@@ -39,7 +39,7 @@ function boot()
 
     local success = downloadFile(loggerUrl,loggerPath)
     if success and fs.exists(loggerPath)  then 
-        local Logger = require(loggerModuleName)
+        local Logger = require(loggerPath)
         local ConsolLog = Logger:new()
         ConsolLog:log("system", "Logger Init ok")
     else
