@@ -2,14 +2,14 @@
 local osUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/RTF_OS/RTF_os.lua"
 local osPath = "RTF/src/RTF_OS/RTF_os.lua"
 
-local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"  -- Replace with your URL
+local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"
 local loggerPath = "RTF/src/Modules/logger.lua"
 local loggerModuleName = "RTF.src.Modules.logger"
 
 local Logger
 local ConsolLog
 
--- Créer les répertoires nécessaires
+-- Create necessary directories
 function createSystemDirectories()
     if not fs.exists("RTF") then fs.makeDir("RTF") end
     if not fs.exists("RTF/src") then fs.makeDir("RTF/src") end
@@ -18,7 +18,7 @@ function createSystemDirectories()
     if not fs.exists("RTF/src/Modules") then fs.makeDir("RTF/src/Modules") end
 end
 
--- Télécharger un fichier
+-- Download a file
 function downloadFile(url, destination)
     local fileContent = http.get(url)
     if fileContent then
@@ -33,7 +33,7 @@ function downloadFile(url, destination)
     end
 end
 
--- Fonction principale de démarrage
+-- Main boot function
 function boot()
     term.clear()
     term.setCursorPos(1, 1)
@@ -41,39 +41,45 @@ function boot()
     print("** RTF Bootloader **")
     createSystemDirectories()
 
-    -- Télécharger et initialiser le logger
-    print("Téléchargement du logger...")
+    -- Download and initialize the logger
+    print("Downloading logger...")
     if downloadFile(loggerUrl, loggerPath) then
-        print("Logger téléchargé avec succès.")
+        print("Logger downloaded successfully.")
 
-        -- Vérification si le fichier existe avant de le charger
+        -- Verify if the file exists before loading
         if fs.exists(loggerPath) then
-            print("Le fichier logger.lua existe. Chargement du module.")
-            
-            -- Charger le module logger
-            Logger = require(loggerModuleName)
-            ConsolLog = Logger:new()
-            ConsolLog:log("system", "Logger initialisé avec succès")
+            print("logger.lua exists. Loading module...")
 
-            -- Télécharger et lancer l'OS
-            print("Téléchargement de l'OS...")
+            -- Use pcall to load the logger and handle errors gracefully
+            local success, err = pcall(function()
+                Logger = require(loggerModuleName)
+                ConsolLog = Logger:new()
+                ConsolLog:log("system", "Logger initialized successfully")
+            end)
+            if not success then
+                printError("Error loading logger: " .. err)
+                return
+            end
+
+            -- Download and run OS
+            print("Downloading OS...")
             if downloadFile(osUrl, osPath) then
-                print("OS téléchargé avec succès.")
+                print("OS downloaded successfully.")
 
-                -- Définir la plateforme : id = 1, name = "Advanced_Computer"
+                -- Define platform: id = 1, name = "Advanced_Computer"
                 local platform = { id = 1, name = "Advanced_Computer" }
-                print("Lancement de l'OS sur la plateforme : " .. platform.name)
-                shell.run(osPath, platform.id, platform.name)  -- Lancer l'OS avec les paramètres de plateforme
+                print("Running OS on platform: " .. platform.name)
+                shell.run(osPath, platform.id, platform.name)  -- Run the OS with platform params
             else
-                printError("Erreur de téléchargement de l'OS.")
+                printError("Error downloading OS.")
             end
         else
-            printError("Erreur : Le fichier logger.lua n'a pas été téléchargé.")
+            printError("Error: logger.lua was not downloaded.")
         end
     else
-        printError("Erreur de téléchargement du logger.")
+        printError("Error downloading the logger.")
     end
 end
 
--- Lancer le bootloader
+-- Start the bootloader
 boot()
