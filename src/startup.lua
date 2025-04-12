@@ -1,84 +1,100 @@
 -- Variables
-local helperUrl = "https://raw.githubusercontent.com/TON_USER/TON_REPO/main/helper.lua"  -- Remplace avec ton URL
-local helperPath = "RTF/src/Modules/helper.lua"  -- Où tu veux sauvegarder helper.lua localement
+local helperUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/helper.lua"  -- Replace with your URL
+local helperPath = "RTF/src/Modules/helper.lua"  -- Where you want to save helper.lua locally
+local helperModuleName = "RTF.src.Modules.helper"
+
+local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/helper.lua"  -- Replace with your URL
+local loggerPath = "RTF/src/Modules/logger.lua"  
 
 local bootloaderUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/bootloader.lua"
 local bootloaderPath = "RTF/bootloader.lua"
 
--- Initialisation de l'affichage
+-- Initialize display
 term.clear()
 term.setCursorPos(1, 1)
 term.setTextColor(colors.cyan)
-print("Téléchargement de helper.lua...")
+print("Downloading helper.lua...")
 
--- Vérifier si helper.lua existe
+-- Check if helper.lua exists
 if fs.exists(helperPath) then
-    -- Supprimer l'ancien helper.lua
+    -- Delete old helper.lua
     fs.delete(helperPath)
     term.setTextColor(colors.red)
-    print("Ancien helper.lua supprimé.")
+    print("Old helper.lua deleted.")
 else
     term.setTextColor(colors.yellow)
-    print("helper.lua n'existe pas. Création...")
+    print("helper.lua does not exist. Creating...")
 end
 
--- Télécharger et créer le nouveau helper.lua
+-- Download and create the new helper.lua
 local file = http.get(helperUrl)
 if file then
     local content = file.readAll()
     file.close()
 
-    -- Ouvrir le fichier en mode "w" pour écraser ou créer
+    -- Open the file in "w" mode to overwrite or create
     local f = fs.open(helperPath, "w")
     f.write(content)
     f.close()
 
     term.setTextColor(colors.green)
-    print("helper.lua téléchargé et remplacé avec succès.")
+    print("helper.lua downloaded and replaced successfully.")
 else
     term.setTextColor(colors.red)
-    print("Erreur : Échec du téléchargement de helper.lua.")
+    print("Error: Failed to download helper.lua.")
 end
 
--- Vérifier si helper.lua est bien téléchargé
+-- Verify if helper.lua is downloaded
 if fs.exists(helperPath) then
-    -- Inclure helper.lua
-    require("RTF.helper")
+    -- Include helper.lua
+    local helper = require(helperModuleName)
 
-    -- Télécharger le bootloader
+    -- Use helper.downloadFile to download bootloader
     term.setTextColor(colors.cyan)
-    print("Téléchargement du bootloader...")
+    print("Downloading dependency...")
+    -- Download the bootloader using helper function
+    local success = helper.downloadFile(bootloaderUrl, bootloaderPath)
 
-    local file = http.get(bootloaderUrl)
-    if file then
-        local content = file.readAll()
-        file.close()
-        local f = fs.open(bootloaderPath, "w")
-        f.write(content)
-        f.close()
+    if success then
         term.setTextColor(colors.green)
-        print("Bootloader téléchargé avec succès.")
+        print("Bootloader downloaded successfully.")
     else
         term.setTextColor(colors.red)
-        print("Erreur : Échec du téléchargement du bootloader.")
+        print("Error: Failed to download bootloader.")
     end
 
-    -- Attendre la pression d'une touche pour lancer le bootloader
+
+
+
+    print("Downloading bootloader...")
+
+    -- Download the bootloader using helper function
+    local success = helper.downloadFile(bootloaderUrl, bootloaderPath)
+
+    if success then
+        term.setTextColor(colors.green)
+        print("Bootloader downloaded successfully.")
+    else
+        term.setTextColor(colors.red)
+        print("Error: Failed to download bootloader.")
+    end
+
+    -- Wait for a key press to launch the bootloader
     term.setTextColor(colors.cyan)
-    print("Appuyez sur n'importe quelle touche pour lancer le bootloader...")
+    print("Press any key to launch the bootloader...")
 
     os.pullEvent("key")
 
-    -- Lancer le bootloader
+    -- Launch the bootloader
     if fs.exists(bootloaderPath) then
         term.setTextColor(colors.green)
-        print("Lancement du bootloader...")
+        print("Launching bootloader...")
         shell.run(bootloaderPath)
     else
         term.setTextColor(colors.red)
-        print("Erreur : Le fichier bootloader n'a pas été trouvé.")
+        print("Error: Bootloader file not found.")
     end
 else
     term.setTextColor(colors.red)
-    print("helper.lua n'a pas été téléchargé, impossible de continuer.")
+    print("helper.lua was not downloaded, cannot proceed.")
 end
