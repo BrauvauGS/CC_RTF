@@ -1,6 +1,6 @@
 -- Variables
 local bootloaderUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/bootloader.lua"
-local bootloaderPath = "RTF/bootloader.lua"
+local bootloaderPath = "RTF/src/bootloader.lua"
 
 -- Create the RTF folder if it doesn't exist
 if not fs.exists("RTF") then

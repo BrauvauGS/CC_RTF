@@ -2,11 +2,17 @@
 local osUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/RTF_OS/RTF_os.lua"
 local osPath = "RTF/src/RTF_OS/RTF_os.lua"
 
+local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"
+local loggerPath = "RTF/src/Modules/logger.lua"
+local loggerModuleName = "RTF.src.Modules.logger"
+
 -- Create necessary directories
-function createDirectories()
+function createSystemDirectories()
     if not fs.exists("RTF") then fs.makeDir("RTF") end
     if not fs.exists("RTF/src") then fs.makeDir("RTF/src") end
     if not fs.exists("RTF/src/RTF_OS") then fs.makeDir("RTF/src/RTF_OS") end
+    if not fs.exists("RTF/src/APPS") then fs.makeDir("RTF/src/APPS") end
+    if not fs.exists("RTF/src/Modules") then fs.makeDir("RTF/src/Modules") end
 end
 
 -- Download a file
@@ -29,7 +35,15 @@ function boot()
     term.setCursorPos(1, 1)
 
     print("** RTF Bootloader **")
-    createDirectories()
+    createSystemDirectories()
+
+    local success = downloadFile(loggerUrl,loggerPath)
+    if success and fs.exists(loggerPath)  then 
+        local Logger = require(loggerModuleName)
+        local ConsolLog = Logger:new()
+        ConsolLog:log("system", "Logger Init ok")
+    else
+    end
 
     -- Download and run OS
     print("Downloading OS...")
