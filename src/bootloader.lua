@@ -1,5 +1,5 @@
 -- Variables
-local BOOTLOADER_VERSION = "0.6.0"
+local BOOTLOADER_VERSION = "0.7.0"
 local VERSION_FILE = "RTF/RTF_local_version.json"
 local OS_FILE = "RTF/src/RTF_OS/RTF_os.lua"
 local JSON_URL = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/system_updates.json"

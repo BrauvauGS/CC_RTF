@@ -1,6 +1,7 @@
 -- startup.lua
 
-local bootloaderUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/bootloader.lua"
+--local bootloaderUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/bootloader.lua"
+local bootloaderUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/dev/src/bootloader.lua"
 local bootloaderPath = "RTF/bootloader.lua"
 
 -- Fonction pour télécharger le bootloader
