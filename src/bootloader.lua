@@ -47,7 +47,7 @@ function boot()
             print("Le fichier logger.lua existe. Chargement du module.")
             
             -- Charger le module logger
-            local Logger = require(loggerModuleName)
+             Logger = require(loggerModuleName)
             local ConsolLog = Logger:new()
             ConsolLog:log("system", "Logger initialisé avec succès")
 
