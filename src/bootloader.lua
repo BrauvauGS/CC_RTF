@@ -8,7 +8,7 @@ function Bootloader:new()
 
     self.BOOTLOADER_VERSION = "0.4.0"
     self.VERSION_FILE = "version.json"
-    self.OS_FILE = "src/RTF_OS/RTF_os.lua"
+    self.OS_FILE = "RTF/src/RTF_OS/RTF_os.lua"
     self.JSON_URL = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/system_updates.json"
 
     self.platforms = {
@@ -99,7 +99,8 @@ end
 
 -- Crée les dossiers nécessaires
 function Bootloader:createDirectories()
-    if not fs.exists("src") then fs.makeDir("src") end
+    if not fs.exists("RTF") then fs.makeDir("RTF") end
+    if not fs.exists("RTF/src") then fs.makeDir("RTF/src") end
     if not fs.exists("src/RTF_OS") then fs.makeDir("src/RTF_OS") end
     if not fs.exists("src/APPS") then fs.makeDir("src/APPS") end
 end
