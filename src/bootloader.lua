@@ -54,7 +54,7 @@ function boot()
             local success, err = pcall(function()
                 Logger = require(loggerModuleName)
                 ConsolLog = Logger:new()
-                ConsolLog:log("system", "Logger initialized successfully")
+                ConsolLog:log("info", "Logger initialized successfully")
             end)
             if not success then
                 printError("Error loading logger: " .. err)
@@ -62,13 +62,13 @@ function boot()
             end
 
             -- Download and run OS
-            print("Downloading OS...")
+            ConsolLog:log("system", "Downloading OS...")
             if downloadFile(osUrl, osPath) then
-                print("OS downloaded successfully.")
+                 ConsolLog:log("info", "OS downloaded successfully.")
 
                 -- Define platform: id = 1, name = "Advanced_Computer"
                 local platform = { id = 1, name = "Advanced_Computer" }
-                print("Running OS on platform: " .. platform.name)
+                 ConsolLog:log("info", "Running OS on platform: " .. platform.name)
                -- shell.run(osPath, platform.id, platform.name)  -- Run the OS with platform params
             else
                 printError("Error downloading OS.")

@@ -13,6 +13,13 @@ term.setCursorPos(1, 1)
 term.setTextColor(colors.cyan)
 print("**Downloading bootloader**")
 
+-- Delete old bootloader if it exists
+if fs.exists(bootloaderPath) then
+    fs.delete(bootloaderPath)
+    term.setTextColor(colors.yellow)
+    print("Old bootloader deleted.")
+end
+
 -- Download the bootloader
 local file = http.get(bootloaderUrl)
 if file then
