@@ -4,7 +4,7 @@ local osPath = "RTF/src/RTF_OS/RTF_os.lua"
 
 local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"
 local loggerPath = "RTF/src/Modules/logger.lua"
-local loggerModuleName = "Modules.logger"
+--local loggerModuleName = "Modules.logger"
 
 local Logger
 local ConsolLog
@@ -52,7 +52,7 @@ function boot()
 
             -- Use pcall to load the logger and handle errors gracefully
             local success, err = pcall(function()
-                Logger = require(loggerModuleName)
+                Logger = require("Modules.logger")
                 ConsolLog = Logger:new()
                 ConsolLog:log("system", "Logger initialized successfully")
             end)
