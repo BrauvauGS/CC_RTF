@@ -55,11 +55,11 @@ end
 
 local success = downloadFile(loggerUrl,loggerPath)
 if success and fs.exists(loggerPath)  then 
-    local Logger = require(loggerPath)
+    local Logger = require(loggerModuleName)
     local ConsolLog = Logger:new()
     ConsolLog:log("system", "Logger Init ok")
 else
-    
+
 end
 -- Start the bootloader
 boot()
