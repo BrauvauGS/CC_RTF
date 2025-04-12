@@ -2,9 +2,12 @@
 local osUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/RTF_OS/RTF_os.lua"
 local osPath = "RTF/src/RTF_OS/RTF_os.lua"
 
-local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"
+local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"  -- Replace with your URL
 local loggerPath = "RTF/src/Modules/logger.lua"
 local loggerModuleName = "RTF.src.Modules.logger"
+
+local Logger
+local ConsolLog
 
 -- Créer les répertoires nécessaires
 function createSystemDirectories()
@@ -22,6 +25,7 @@ function downloadFile(url, destination)
         local fileHandler = fs.open(destination, "w")
         fileHandler.write(fileContent.readAll())
         fileHandler.close()
+        fileContent.close()
         return true
     else
         printError("Erreur de téléchargement pour " .. url)
@@ -47,8 +51,8 @@ function boot()
             print("Le fichier logger.lua existe. Chargement du module.")
             
             -- Charger le module logger
-             Logger = require(loggerModuleName)
-            local ConsolLog = Logger:new()
+            Logger = require(loggerModuleName)
+            ConsolLog = Logger:new()
             ConsolLog:log("system", "Logger initialisé avec succès")
 
             -- Télécharger et lancer l'OS
