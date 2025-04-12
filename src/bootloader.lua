@@ -4,7 +4,7 @@ local osPath = "RTF/src/RTF_OS/RTF_os.lua"
 
 local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"
 local loggerPath = "RTF/src/Modules/logger.lua"
---local loggerModuleName = "Modules.logger"
+local loggerModuleName = "Modules.logger"
 
 local Logger
 local ConsolLog
@@ -52,7 +52,7 @@ function boot()
 
             -- Use pcall to load the logger and handle errors gracefully
             local success, err = pcall(function()
-                Logger = require("Modules.logger")
+                Logger = require(loggerModuleName)
                 ConsolLog = Logger:new()
                 ConsolLog:log("system", "Logger initialized successfully")
             end)
@@ -69,7 +69,7 @@ function boot()
                 -- Define platform: id = 1, name = "Advanced_Computer"
                 local platform = { id = 1, name = "Advanced_Computer" }
                 print("Running OS on platform: " .. platform.name)
-                shell.run(osPath, platform.id, platform.name)  -- Run the OS with platform params
+               -- shell.run(osPath, platform.id, platform.name)  -- Run the OS with platform params
             else
                 printError("Error downloading OS.")
             end
