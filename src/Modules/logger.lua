@@ -20,7 +20,7 @@ function Logger:new()
         warning = colors.yellow,
         error = colors.red,
         system = colors.purple,
-        download = colors.lightBlue	,
+        download = colors.colors.magenta,
         default = colors.grey -- Default color if no level is provided
     }
 

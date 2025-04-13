@@ -10,7 +10,7 @@ end
 -- Initialize display
 term.clear()
 term.setCursorPos(1, 1)
-term.setTextColor(colors.cyan)
+term.setTextColor(colors.magenta)
 print("**Downloading bootloader**")
 
 -- Delete old bootloader if it exists
