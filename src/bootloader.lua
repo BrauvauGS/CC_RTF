@@ -37,6 +37,7 @@ end
 function boot()
     term.clear()
     term.setCursorPos(1, 1)
+    term.setTextColor(colors.cyan)
 
     print("** RTF Bootloader **")
     createSystemDirectories()
@@ -44,17 +45,15 @@ function boot()
     -- Download and initialize the logger
     print("Downloading logger...")
     if downloadFile(loggerUrl, loggerPath) then
-        print("Logger downloaded successfully.")
 
         -- Verify if the file exists before loading
         if fs.exists(loggerPath) then
-            print("logger.lua exists. Loading module...")
 
             -- Use pcall to load the logger and handle errors gracefully
             local success, err = pcall(function()
                 Logger = require(loggerModuleName)
                 ConsolLog = Logger:new()
-                ConsolLog:log("info", "Logger initialized successfully")
+                ConsolLog:log("I", "Logger initialized successfully")
             end)
             if not success then
                 printError("Error loading logger: " .. err)
@@ -62,16 +61,16 @@ function boot()
             end
 
             -- Download and run OS
-            ConsolLog:log("system", "Downloading OS...")
+            ConsolLog:log("S", "Downloading OS...")
             if downloadFile(osUrl, osPath) then
-                 ConsolLog:log("info", "OS downloaded successfully.")
+                 ConsolLog:log("I", "OS downloaded successfully.")
 
                 -- Define platform: id = 1, name = "Advanced_Computer"
                 local platform = { id = 1, name = "Advanced_Computer" }
-                 ConsolLog:log("info", "Running OS on platform: " .. platform.name)
+                 ConsolLog:log("I", "Running OS on platform: " .. platform.name)
                -- shell.run(osPath, platform.id, platform.name)  -- Run the OS with platform params
             else
-                printError("Error downloading OS.")
+                ConsolLog:log("E", "downloading OS.")
             end
         else
             printError("Error: logger.lua was not downloaded.")

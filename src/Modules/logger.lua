@@ -5,6 +5,14 @@ function Logger:new()
     local instance = {}
     setmetatable(instance, { __index = Logger })
 
+    -- Mapping of short levels to full levels
+    instance.levelMap = {
+        I = "info",
+        W = "warning",
+        E = "error",
+        S = "system"
+    }
+
     -- Default colors for each log level
     instance.colors = {
         info = colors.green,
@@ -18,18 +26,15 @@ function Logger:new()
 end
 
 -- Function to log a message with a specific level
-function Logger:log(level, message)
-    -- If no level is passed, set the color to grey (default)
-    local color = self.colors[level] or self.colors.default
-    local levelText = level and ("[" .. level:upper() .. "]") or "[TRACE]"
+function Logger:log(shortLevel, message)
+    local fullLevel = self.levelMap[shortLevel] or "default"
+    local color = self.colors[fullLevel] or self.colors.default
+    local levelText = "[" .. fullLevel:upper() .. "] :"
 
-    -- Set the text color for the level
     term.setTextColor(color)
-    write(levelText .. " ")  -- Print the level on the same line
-
-    -- Reset the color back to white for the message
+    write(levelText .. " ")
     term.setTextColor(colors.white)
-    print(message)  -- Print the message on the same line after the level
+    print(message)
 end
 
 -- Return the Logger class
