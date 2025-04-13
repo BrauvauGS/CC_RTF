@@ -1,8 +1,19 @@
 -- RTF/helper.lua
+local logger = require("logger")
+
 local helper = {}
 
+-- Constructor to create a new Logger instance
+function helper:new()
+    local instance = {}
+    setmetatable(instance, { __index = helper })
+
+    instance.logger = logger:new()
+
+    return instance
+end
 -- Function to download a file from a URL and save it locally
-function helper.downloadFile(url, destination)
+function helper:downloadFile(url, destination)
     -- Check if the URL is valid
     if not url or url == "" then
         printError("Error: Invalid URL.")
@@ -44,7 +55,7 @@ function helper.downloadFile(url, destination)
     f.close()
 
     -- Confirm success
-    print("File downloaded and saved to " .. destination)
+    self.logger:log("I", "File downloaded and saved to " .. destination)
     return true
 end
 
