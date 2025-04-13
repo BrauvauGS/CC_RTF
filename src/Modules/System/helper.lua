@@ -1,5 +1,5 @@
 -- RTF/helper.lua
-local logger = require("System.logger")
+
 
 local helper = {}
 
@@ -7,6 +7,8 @@ local helper = {}
 function helper:new()
     local instance = {}
     setmetatable(instance, { __index = helper })
+
+    local logger = require("src.Modules.System.logger")
 
     instance.logger = logger:new()
 
@@ -29,7 +31,7 @@ end
 function helper:downloadFile(url, destination)
     -- Check if the URL is valid
     if not url or url == "" then
-        self.logger:log("E", "Error: Invalid URL.")
+       self.logger:log("E", "Error: Invalid URL.")
         return false
     end
 
@@ -59,7 +61,7 @@ function helper:downloadFile(url, destination)
     -- Create or overwrite the local file at the specified path
     local f = fs.open(destination, "w")
     if not f then
-         self.logger:log("E", "Error: Failed to open file for writing.")
+        self.logger:log("E", "Error: Failed to open file for writing.")
         return false
     end
 
@@ -75,36 +77,15 @@ function helper:getVersion()
     return self.version
 end
 
-function helper:getPlatform()
+function helper:getPlatforme()
     local isAdvanced = term.isColor()
     local isPocket = pocket ~= nil
     local isTurtle = turtle ~= nil
     local isCommand = commands ~= nil
 
-    if isCommand then
-        return self.platforms.COMMAND_COMPUTER
-    end
-
-    if isTurtle then
-        if isAdvanced then
-            return self.platforms.ADVANCED_TURTLE
-        else
-            return self.platforms.TURTLE
-        end
-    end
-
-    if isPocket then
-        if isAdvanced then
-            return self.platforms.ADVANCED_POCKET
-        else
-            return self.platforms.POCKET
-        end
-    end
-
-    if isAdvanced then
-        return self.platforms.ADVANCED_COMPUTER
-    else
-        return self.platforms.COMPUTER
-    end
+    if isCommand then return self.platforms.COMMAND_COMPUTER end
+    if isTurtle then return isAdvanced and self.platforms.ADVANCED_TURTLE or self.platforms.TURTLE end
+    if isPocket then return isAdvanced and self.platforms.ADVANCED_POCKET or self.platforms.POCKET end
+    return isAdvanced and self.platforms.ADVANCED_COMPUTER or self.platforms.COMPUTER
 end
 return helper
