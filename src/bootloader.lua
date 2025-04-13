@@ -18,8 +18,8 @@ function boot()
     term.setCursorPos(1, 1)
     term.setTextColor(colors.cyan)
     print("** RTF Bootloader " .. "[" ..version.."]".." **")
-    ConsolLog:log("S","Logger init ok")
-    ConsolLog:log("S","Helper init ok " .. helper:getVersion())
+    ConsolLog:log("S","Logger V ".. ConsolLog:getVersion() .." loaded")
+    ConsolLog:log("S","Helper V ".. helper:getVersion() .." loaded")
 
 end
 

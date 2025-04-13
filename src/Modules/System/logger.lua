@@ -4,7 +4,7 @@ local Logger = {}
 function Logger:new()
     local instance = {}
     setmetatable(instance, { __index = Logger })
-
+    instance.version = "1.0.0"
     -- Mapping of short levels to full levels
     instance.levelMap = {
         I = "info",
@@ -37,6 +37,12 @@ function Logger:log(shortLevel, message)
     write(levelText .. " ")
     term.setTextColor(colors.white)
     print(message)
+end
+
+function Logger:getVersion()
+
+    return self.version
+    
 end
 
 -- Return the Logger class

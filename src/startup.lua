@@ -2,7 +2,6 @@ term.clear()
 term.setCursorPos(1, 1)
 
 local version = "1.0.0"
-local build = "2025-04-13" -- Date de la dernière mise à jour
 local startTime = os.clock()
 local status = true
 
@@ -70,6 +69,7 @@ if status then
         write(".")
         sleep(0.8)
     end
+    print("")
     term.setTextColor(colors.white)
     shell.run("/RTF/bootloader.lua")
 else
