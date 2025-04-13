@@ -8,9 +8,10 @@ function helper:new()
     local instance = {}
     setmetatable(instance, { __index = helper })
 
+    local logger = require("src.Modules.System.logger")
     instance.logger = logger:new()
 
-    local logger = require("src.Modules.System.logger")
+
     instance.version = "1.0.0"
 
     instance.platforms = {
@@ -76,7 +77,7 @@ function helper:getVersion()
     return self.version
 end
 
-function helper:getPlatforme()
+function helper:getPlatform()
     local isAdvanced = term.isColor()
     local isPocket = pocket ~= nil
     local isTurtle = turtle ~= nil
