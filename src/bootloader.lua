@@ -8,7 +8,7 @@ local osPath = "/RTF/src/RTF_OS/RTF_os.lua"
 
 --obj
 local ConsolLog = logger:new()
-local helper = helper:new()
+local h = helper:new()
 
 
 
@@ -24,12 +24,12 @@ function boot()
     term.setTextColor(colors.white)
 
     ConsolLog:log("S","Logger V".. ConsolLog:getVersion() .." loaded")
-    ConsolLog:log("S","Helper V".. helper:getVersion() .." loaded")
+    ConsolLog:log("S","Helper V".. h:getVersion() .." loaded")
 
-    local platform = helper:getPlatform()
+    local platform = h:getPlatform()
     ConsolLog:log("I","Platform ID :".. platform.id .." name : " .. platform.name)
 
-    local success = helper.downloadFile(osUrl, osPath)
+    local success = h.downloadFile(osUrl, osPath)
     if success == true then
         ConsolLog:log("D","RTF_os dowloaded")
     else

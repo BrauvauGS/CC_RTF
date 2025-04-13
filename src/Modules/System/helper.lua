@@ -81,9 +81,30 @@ function helper:getPlatform()
     local isTurtle = turtle ~= nil
     local isCommand = commands ~= nil
 
-    if isCommand then return self.platforms.COMMAND_COMPUTER end
-    if isTurtle then return isAdvanced and self.platforms.ADVANCED_TURTLE or self.platforms.TURTLE end
-    if isPocket then return isAdvanced and platforms.ADVANCED_POCKET or self.platforms.POCKET end
-    return isAdvanced and self.platforms.ADVANCED_COMPUTER or self.platforms.COMPUTER
+    if isCommand then
+        return self.platforms.COMMAND_COMPUTER
+    end
+
+    if isTurtle then
+        if isAdvanced then
+            return self.platforms.ADVANCED_TURTLE
+        else
+            return self.platforms.TURTLE
+        end
+    end
+
+    if isPocket then
+        if isAdvanced then
+            return self.platforms.ADVANCED_POCKET
+        else
+            return self.platforms.POCKET
+        end
+    end
+
+    if isAdvanced then
+        return self.platforms.ADVANCED_COMPUTER
+    else
+        return self.platforms.COMPUTER
+    end
 end
 return helper
