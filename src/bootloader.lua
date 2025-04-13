@@ -1,4 +1,10 @@
 -- Variables
+local Looger = http.get("https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua")
+local fh = fs.open("/RTF/src/Modules/logger.lua", "w")
+fh.write(Looger.readAll())
+fh.close()
+
+
 
 local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"
 local loggerPath = "RTF/src/Modules/logger.lua"
