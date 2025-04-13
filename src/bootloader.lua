@@ -69,7 +69,7 @@ function boot()
                 -- Verify if the file exists before loading
                 if fs.exists(helperPath) then
 
-                                -- Use pcall to load the logger and handle errors gracefully
+                    -- Use pcall to load the logger and handle errors gracefully
                     local success, err = pcall(function()
                         local Rtfhelper = require(helperModuleName)
                         helper = Rtfhelper:new()
@@ -81,8 +81,7 @@ function boot()
                     end
                     -- Download and run OS
                     ConsolLog:log("S", "Downloading OS...")
-                    if downloadFile(osUrl, osPath) then
-                        ConsolLog:log("I", "OS downloaded successfully.")
+                    if helper:downloadFile(osUrl, osPath) then
 
                         -- Define platform: id = 1, name = "Advanced_Computer"
                         local platform = { id = 1, name = "Advanced_Computer" }
