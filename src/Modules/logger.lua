@@ -29,7 +29,7 @@ end
 function Logger:log(shortLevel, message)
     local fullLevel = self.levelMap[shortLevel] or "default"
     local color = self.colors[fullLevel] or self.colors.default
-    local levelText = "[" .. fullLevel:upper() .. "] :"
+    local levelText = "[" .. fullLevel:upper() .. "]:"
 
     term.setTextColor(color)
     write(levelText .. " ")

@@ -1,13 +1,16 @@
 -- Variables
-local osUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/RTF_OS/RTF_os.lua"
-local osPath = "RTF/src/RTF_OS/RTF_os.lua"
 
 local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua"
 local loggerPath = "RTF/src/Modules/logger.lua"
 local loggerModuleName = "Modules.logger"
 
-local Logger
-local ConsolLog
+local helperUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/helper.lua"  -- Replace with your URL
+local helperPath = "RTF/src/Modules/helper.lua"  -- Where you want to save helper.lua locally
+local helperModuleName = "Modules.helper"
+
+local osUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/RTF_OS/RTF_os.lua"
+local osPath = "RTF/src/RTF_OS/RTF_os.lua"
+
 
 -- Create necessary directories
 function createSystemDirectories()
@@ -51,8 +54,8 @@ function boot()
 
             -- Use pcall to load the logger and handle errors gracefully
             local success, err = pcall(function()
-                Logger = require(loggerModuleName)
-                ConsolLog = Logger:new()
+                local Logger = require(loggerModuleName)
+                local ConsolLog = Logger:new()
                 ConsolLog:log("I", "Logger initialized successfully")
             end)
             if not success then
@@ -60,18 +63,35 @@ function boot()
                 return
             end
 
-            -- Download and run OS
-            ConsolLog:log("S", "Downloading OS...")
-            if downloadFile(osUrl, osPath) then
-                 ConsolLog:log("I", "OS downloaded successfully.")
+            if downloadFile(helperUrl, helperPath) then
 
-                -- Define platform: id = 1, name = "Advanced_Computer"
-                local platform = { id = 1, name = "Advanced_Computer" }
-                 ConsolLog:log("I", "Running OS on platform: " .. platform.name)
-               -- shell.run(osPath, platform.id, platform.name)  -- Run the OS with platform params
-            else
-                ConsolLog:log("E", "downloading OS.")
-            end
+                -- Verify if the file exists before loading
+                if fs.exists(helperPath) then
+
+                                -- Use pcall to load the logger and handle errors gracefully
+                    local success, err = pcall(function()
+                        local helper = require(helperModuleName)
+                        local helper = helper:new()
+                        ConsolLog:log("I", "helper initialized successfully")
+                    end)
+                    if not success then
+                        ConsolLog:log("E", "loading logger: " .. err)
+                        return
+                    end
+                    -- Download and run OS
+                    ConsolLog:log("S", "Downloading OS...")
+                    if downloadFile(osUrl, osPath) then
+                        ConsolLog:log("I", "OS downloaded successfully.")
+
+                        -- Define platform: id = 1, name = "Advanced_Computer"
+                        local platform = { id = 1, name = "Advanced_Computer" }
+                        ConsolLog:log("I", "Running OS on platform: " .. platform.name)
+                    -- shell.run(osPath, platform.id, platform.name)  -- Run the OS with platform params
+                    else
+                        ConsolLog:log("E", "downloading OS.")
+                    end
+                end
+            end    
         else
             printError("Error: logger.lua was not downloaded.")
         end
