@@ -18,11 +18,11 @@ function boot()
     term.setCursorPos(1, 1)
     term.setTextColor(colors.cyan)
     print("** RTF Bootloader " .. "[" ..version.."]".." **")
-    ConsolLog:log("S","Logger V ".. ConsolLog:getVersion() .." loaded")
-    ConsolLog:log("S","Helper V ".. helper:getVersion() .." loaded")
+    ConsolLog:log("S","Logger V".. ConsolLog:getVersion() .." loaded")
+    ConsolLog:log("S","Helper V".. helper:getVersion() .." loaded")
 
     local platform = helper:getPlatform()
-    ConsolLog:log("I","Platform id :".. platform.id .." name " .. platform.name)
+    ConsolLog:log("I","Platform ID :".. platform.id .." name : " .. platform.name)
 
 end
 
