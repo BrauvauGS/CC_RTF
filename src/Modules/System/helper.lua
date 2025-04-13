@@ -1,5 +1,5 @@
 -- RTF/helper.lua
-local logger = require("src.Modules.System.logger")
+local logger = require("System.logger")
 
 local helper = {}
 
