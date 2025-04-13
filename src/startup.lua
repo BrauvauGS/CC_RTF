@@ -19,8 +19,8 @@ local function downloadModule(url, path)
 end
 
 
-downloadModule("https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua", "/RTF/src/Modules/logger.lua")
-downloadModule("https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/helper.lua", "/RTF/src/Modules/helper.lua")
+downloadModule("https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/logger.lua", "/RTF/src/Modules/System/logger.lua")
+downloadModule("https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/helper.lua", "/RTF/src/Modules/System/helper.lua")
 downloadModule("https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/bootloader.lua", "/RTF/bootloader.lua")
 
 
