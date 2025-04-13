@@ -1,8 +1,9 @@
 -- RTF/helper.lua
-local logger = require("src.Modules.System.logger")
+
 
 local helper = {}
 
+local logger = require("src.Modules.System.logger")
 -- Constructor to create a new Logger instance
 function helper:new()
     local instance = {}
@@ -12,7 +13,7 @@ function helper:new()
     instance.logger = logger:new()
 
 
-    instance.version = "1.0.2"
+    instance.version = "1.0.3"
 
     instance.platforms = {
         COMPUTER = {id = 1, name = "Computer"},
