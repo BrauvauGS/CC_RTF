@@ -7,8 +7,21 @@ local helper = {}
 function helper:new()
     local instance = {}
     setmetatable(instance, { __index = helper })
-    instance.version = "1.0.0"
+
     instance.logger = logger:new()
+
+    instance.version = "1.0.0"
+
+    instance.platforms = {
+        COMPUTER = {id = 1, name = "Computer"},
+        ADVANCED_COMPUTER = {id = 2, name = "Advanced_Computer"},
+        TURTLE = {id = 3, name = "Turtle"},
+        ADVANCED_TURTLE = {id = 4, name = "Advanced_Turtle"},
+        POCKET = {id = 5, name = "Pocket"},
+        ADVANCED_POCKET = {id = 6, name = "Advanced_Pocket"},
+        COMMAND_COMPUTER = {id = 7, name = "Command_Computer"}
+    }
+
 
     return instance
 end
@@ -62,4 +75,15 @@ function helper:getVersion()
     return self.version
 end
 
+function helper:getPlatform()
+    local isAdvanced = term.isColor()
+    local isPocket = pocket ~= nil
+    local isTurtle = turtle ~= nil
+    local isCommand = commands ~= nil
+
+    if isCommand then return self.platforms.COMMAND_COMPUTER end
+    if isTurtle then return isAdvanced and self.platforms.ADVANCED_TURTLE or self.platforms.TURTLE end
+    if isPocket then return isAdvanced and platforms.ADVANCED_POCKET or self.platforms.POCKET end
+    return isAdvanced and self.platforms.ADVANCED_COMPUTER or self.platforms.COMPUTER
+end
 return helper

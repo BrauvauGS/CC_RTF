@@ -21,6 +21,9 @@ function boot()
     ConsolLog:log("S","Logger V ".. ConsolLog:getVersion() .." loaded")
     ConsolLog:log("S","Helper V ".. helper:getVersion() .." loaded")
 
+    local platform = helper:getPlatform()
+    ConsolLog:log("I","Platform id :".. platform.id .." name " .. platform.name)
+
 end
 
 -- Start the bootloader
