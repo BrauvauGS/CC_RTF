@@ -13,7 +13,7 @@ function helper:new()
     instance.logger = logger:new()
 
 
-    instance.version = "1.0.3"
+    instance.version = "1.0.4"
 
     instance.platforms = {
         COMPUTER = {id = 1, name = "Computer"},
@@ -32,20 +32,20 @@ end
 function helper:downloadFile(url, destination)
     -- Check if the URL is valid
     if not url or url == "" then
-       self.logger:log("E", "Error: Invalid URL.")
+       --self.logger:log("E", "Error: Invalid URL.")
         return false
     end
 
     -- Check if the destination path is valid
     if not destination or destination == "" then
-        self.logger:log("E", "Error: Invalid destination path.")
+       -- self.logger:log("E", "Error: Invalid destination path.")
         return false
     end
 
     -- Try to fetch the file from the URL
     local file = http.get(url)
     if not file then
-        self.logger:log("E", "Error: Failed to download from " .. url)
+        --self.logger:log("E", "Error: Failed to download from " .. url)
         return false
     end
 
@@ -55,14 +55,14 @@ function helper:downloadFile(url, destination)
 
     -- Check if the content is empty
     if content == "" then
-        self.logger:log("E", "Error: Downloaded file is empty.")
+        --self.logger:log("E", "Error: Downloaded file is empty.")
         return false
     end
 
     -- Create or overwrite the local file at the specified path
     local f = fs.open(destination, "w")
     if not f then
-        self.logger:log("E", "Error: Failed to open file for writing.")
+        --self.logger:log("E", "Error: Failed to open file for writing.")
         return false
     end
 
@@ -71,7 +71,7 @@ function helper:downloadFile(url, destination)
     f.close()
 
     -- Confirm success
-    self.logger:log("I", "File downloaded and saved to " .. destination)
+    --self.logger:log("I", "File downloaded and saved to " .. destination)
     return true
 end
 function helper:getVersion()
