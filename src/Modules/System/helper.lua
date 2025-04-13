@@ -1,5 +1,5 @@
 -- RTF/helper.lua
-local logger = require("Modules.logger")
+local logger = require("src.Modules.System.logger")
 
 local helper = {}
 
@@ -7,7 +7,7 @@ local helper = {}
 function helper:new()
     local instance = {}
     setmetatable(instance, { __index = helper })
-
+    instance.version = "1.0.0"
     instance.logger = logger:new()
 
     return instance
@@ -57,6 +57,9 @@ function helper:downloadFile(url, destination)
     -- Confirm success
     self.logger:log("I", "File downloaded and saved to " .. destination)
     return true
+end
+function helper:getVersion()
+    return self.version
 end
 
 return helper
