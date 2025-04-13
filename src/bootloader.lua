@@ -47,6 +47,7 @@ function boot()
     createSystemDirectories()
 
     -- Download and initialize the logger
+    term.setTextColor(colors.lightBlue)
     print("Downloading logger...")
     if downloadFile(loggerUrl, loggerPath) then
 
@@ -63,7 +64,7 @@ function boot()
                 printError("Error loading logger: " .. err)
                 return
             end
-
+            ConsolLog:log("D", "Downloading helper...")
             if downloadFile(helperUrl, helperPath) then
 
                 -- Verify if the file exists before loading
@@ -80,7 +81,7 @@ function boot()
                         return
                     end
                     -- Download and run OS
-                    ConsolLog:log("S", "Downloading OS...")
+                    ConsolLog:log("D", "Downloading OS...")
                     if helper:downloadFile(osUrl, osPath) then
 
                         -- Define platform: id = 1, name = "Advanced_Computer"

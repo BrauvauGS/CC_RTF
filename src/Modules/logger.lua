@@ -10,7 +10,8 @@ function Logger:new()
         I = "info",
         W = "warning",
         E = "error",
-        S = "system"
+        S = "system",
+        D = "download"
     }
 
     -- Default colors for each log level
@@ -19,6 +20,7 @@ function Logger:new()
         warning = colors.yellow,
         error = colors.red,
         system = colors.purple,
+        download = colors.lightBlue	,
         default = colors.grey -- Default color if no level is provided
     }
 
