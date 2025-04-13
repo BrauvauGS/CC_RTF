@@ -29,20 +29,20 @@ end
 function helper:downloadFile(url, destination)
     -- Check if the URL is valid
     if not url or url == "" then
-        printError("Error: Invalid URL.")
+        self.logger:log("E", "Error: Invalid URL.")
         return false
     end
 
     -- Check if the destination path is valid
     if not destination or destination == "" then
-        printError("Error: Invalid destination path.")
+        self.logger:log("E", "Error: Invalid destination path.")
         return false
     end
 
     -- Try to fetch the file from the URL
     local file = http.get(url)
     if not file then
-        printError("Error: Failed to download from " .. url)
+        self.logger:log("E", "Error: Failed to download from " .. url)
         return false
     end
 
@@ -52,14 +52,14 @@ function helper:downloadFile(url, destination)
 
     -- Check if the content is empty
     if content == "" then
-        printError("Error: Downloaded file is empty.")
+        self.logger:log("E", "Error: Downloaded file is empty.")
         return false
     end
 
     -- Create or overwrite the local file at the specified path
     local f = fs.open(destination, "w")
     if not f then
-        printError("Error: Failed to open file for writing.")
+         self.logger:log("E", "Error: Failed to open file for writing.")
         return false
     end
 

@@ -16,13 +16,25 @@ local helper = helper:new()
 function boot()
     term.clear()
     term.setCursorPos(1, 1)
+
     term.setTextColor(colors.cyan)
-    print("** RTF Bootloader " .. "[" ..version.."]".." **")
+    print("***************************")
+    print("*  RTF Bootloader v" .. version .. "   *")
+    print("***************************")
+    term.setTextColor(colors.white)
+
     ConsolLog:log("S","Logger V".. ConsolLog:getVersion() .." loaded")
     ConsolLog:log("S","Helper V".. helper:getVersion() .." loaded")
 
     local platform = helper:getPlatform()
     ConsolLog:log("I","Platform ID :".. platform.id .." name : " .. platform.name)
+
+    local success = helper.downloadFile(osUrl, osPath)
+    if success == true then
+        ConsolLog:log("D","RTF_os dowloaded")
+    else
+        ConsolLog:log("E","RTF_os dowload")
+    end
 
 end
 
