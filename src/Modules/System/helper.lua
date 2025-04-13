@@ -12,7 +12,7 @@ function helper:new()
     instance.logger = logger:new()
 
 
-    instance.version = "1.0.0"
+    instance.version = "1.0.1"
 
     instance.platforms = {
         COMPUTER = {id = 1, name = "Computer"},
