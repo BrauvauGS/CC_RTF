@@ -8,10 +8,9 @@ function helper:new()
     local instance = {}
     setmetatable(instance, { __index = helper })
 
-    local logger = require("src.Modules.System.logger")
-
     instance.logger = logger:new()
 
+    local logger = require("src.Modules.System.logger")
     instance.version = "1.0.0"
 
     instance.platforms = {
