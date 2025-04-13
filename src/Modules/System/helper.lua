@@ -1,5 +1,5 @@
 -- RTF/helper.lua
-
+local logger = require("src.Modules.System.logger")
 
 local helper = {}
 
@@ -8,11 +8,11 @@ function helper:new()
     local instance = {}
     setmetatable(instance, { __index = helper })
 
-    local logger = require("src.Modules.System.logger")
+
     instance.logger = logger:new()
 
 
-    instance.version = "1.0.1"
+    instance.version = "1.0.2"
 
     instance.platforms = {
         COMPUTER = {id = 1, name = "Computer"},
