@@ -4,14 +4,15 @@ local loggerUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads
 local loggerPath = "RTF/src/Modules/logger.lua"
 local loggerModuleName = "Modules.logger"
 
-local helperUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/helper.lua"  -- Replace with your URL
-local helperPath = "RTF/src/Modules/helper.lua"  -- Where you want to save helper.lua locally
+local helperUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/Modules/helper.lua"
+local helperPath = "RTF/src/Modules/helper.lua"  
 local helperModuleName = "Modules.helper"
 
 local osUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/RTF_OS/RTF_os.lua"
 local osPath = "RTF/src/RTF_OS/RTF_os.lua"
 
-
+local ConsolLog
+local helper
 -- Create necessary directories
 function createSystemDirectories()
     if not fs.exists("RTF") then fs.makeDir("RTF") end
@@ -55,7 +56,7 @@ function boot()
             -- Use pcall to load the logger and handle errors gracefully
             local success, err = pcall(function()
                 local Logger = require(loggerModuleName)
-                local ConsolLog = Logger:new()
+                ConsolLog = Logger:new()
                 ConsolLog:log("I", "Logger initialized successfully")
             end)
             if not success then
@@ -70,8 +71,8 @@ function boot()
 
                                 -- Use pcall to load the logger and handle errors gracefully
                     local success, err = pcall(function()
-                        local helper = require(helperModuleName)
-                        local helper = helper:new()
+                        local Rtfhelper = require(helperModuleName)
+                        helper = Rtfhelper:new()
                         ConsolLog:log("I", "helper initialized successfully")
                     end)
                     if not success then
