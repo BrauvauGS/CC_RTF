@@ -38,7 +38,7 @@ function helper:downloadFile(url, destination)
 
     -- Check if the destination path is valid
     if not destination or destination == "" then
-       -- self.logger:log("E", "Error: Invalid destination path.")
+        self.logger:log("E", "Error: Invalid destination path.")
         return false
     end
 
