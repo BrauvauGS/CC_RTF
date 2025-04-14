@@ -7,7 +7,7 @@ Logger.__index = Logger
 function Logger:new()
     local instance = setmetatable({}, Logger)
 
-    instance.version = "1.0.0"
+    instance.version = "1.0.2"
 
     -- Correspondance des niveaux abrégés
     instance.levelMap = {

@@ -12,7 +12,7 @@ function Helper:new()
 
     -- Initialisation des attributs
     instance.logger = Logger:new()
-    instance.version = "1.0.5"
+    instance.version = "1.0.6"
 
     instance.platforms = {
         COMPUTER = {id = 1, name = "Computer"},
