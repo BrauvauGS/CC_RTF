@@ -1,4 +1,4 @@
--- RTF/helper.lua
+-- src/Modules/RTF/helper.lua
 
 local Logger = require("src.Modules.System.logger")
 
@@ -8,7 +8,7 @@ Helper.__index = Helper
 
 -- Constructeur
 function Helper:new()
-    local instance = setmetatable({}, Helper)
+    local instance = setmetatable({}, self)  -- Utilisation de `self` pour l'héritage dynamique
 
     -- Initialisation des attributs
     instance.logger = Logger:new()
@@ -26,7 +26,6 @@ function Helper:new()
 
     return instance
 end
-
 -- Function to download a file from a URL and save it locally
 function Helper:downloadFile(url, destination)
     if not url or url == "" then

@@ -5,9 +5,9 @@ Logger.__index = Logger
 
 -- Constructeur
 function Logger:new()
-    local instance = setmetatable({}, Logger)
+    local instance = setmetatable({}, self)  -- Modifié pour utiliser `self` et permettre l'héritage dynamique
 
-    instance.version = "1.0.2"
+    instance.version = "1.0.3"
 
     -- Correspondance des niveaux abrégés
     instance.levelMap = {
