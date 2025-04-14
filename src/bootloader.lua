@@ -1,7 +1,7 @@
 local logger = require("src.Modules.System.logger")
 local helper = require("src.Modules.System.helper")
 
-local version = "1.0.0"
+local version = "1.0.1"
 
 local osUrl = "https://raw.githubusercontent.com/BrauvauGS/CC_RTF/refs/heads/dev/src/RTF_OS/RTF_os.lua"
 local osPath = "/RTF/src/RTF_OS/RTF_os.lua"
@@ -29,7 +29,7 @@ function boot()
     local platform = h:getPlatform()
     ConsolLog:log("I","Platform ID :".. platform.id .." name : " .. platform.name)
 
-    local success = h.downloadFile(osUrl, osPath)
+    local success = h:downloadFile(osUrl, osPath)
     if success == true then
         ConsolLog:log("D","RTF_os dowloaded")
     else
