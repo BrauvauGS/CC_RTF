@@ -1,8 +1,13 @@
 -- RTF_os.lua
--- Interface principale de RTF OS avec fenêtres (CC: Tweaked)
+-- Interface principale de RTF OS
 
 local osName = "RTF OS"
-local osVersion = "v1.4.0"
+local osVersion = "v1.2.0"
+
+-- Recuperation des arguments (utilises plus tard si besoin)
+local args = {...}
+local platformId = args[1] or "Unknown"
+local platformName = args[2] or "Inconnue"
 
 -- Menu vertical
 local menuItems = {
@@ -14,57 +19,39 @@ local menuItems = {
 }
 local selectedIndex = 1
 
--- Fonction pour dessiner la fenêtre
-local function drawWindow(title, x, y, width, height)
-    -- Créer la fenêtre
-    local win = window.create(term.current(), x, y, width, height)
-    win.setBackgroundColor(colors.black)
-    win.setTextColor(colors.white)
-    win.clear()
+-- Dessiner l'interface
+local function drawUI()
+    local w, h = term.getSize()
+    term.clear()
 
-    -- Titre de la fenêtre
-    win.setCursorPos(2, 1)
-    win.setTextColor(colors.cyan)
-    win.write(title)
+    -- En-tete OS (centre)
+    local header = osName .. " " .. osVersion
+    local headerX = math.floor((w - #header) / 2)
+    term.setCursorPos(headerX, 1)
+    term.setTextColor(colors.cyan)
+    write(header)
 
-    -- Retourner la fenêtre créée
-    return win
-end
-
--- Fonction pour dessiner le menu dans la fenêtre
-local function drawMenu(window)
+    -- Menu vertical
     for i, item in ipairs(menuItems) do
-        window.setCursorPos(2, i + 2)
+        term.setCursorPos(2, i + 2)
         if i == selectedIndex then
-            window.setTextColor(colors.purple)
-            window.write("[" .. item .. "]")
+            term.setTextColor(colors.purple)
+            write("[" .. item .. "]")
         else
-            window.setTextColor(colors.lightGray)
-            window.write(" " .. item)
+            term.setTextColor(colors.lightGray)
+            write(" " .. item)
         end
     end
-end
 
--- Fonction pour dessiner le contenu à droite
-local function drawContent(window)
-    window.clear()
-    window.setTextColor(colors.white)
-    window.setCursorPos(2, 2)
-    window.write("Page sélectionnée : " .. menuItems[selectedIndex])
+    -- Contenu page (titre seulement)
+    term.setTextColor(colors.white)
+    term.setCursorPos(20, 4)
+    print("Page selectionnee : " .. menuItems[selectedIndex])
 end
 
 -- Boucle principale
 local function mainLoop()
-    local w, h = term.getSize()
-
-    -- Créer les fenêtres
-    local menuWindow = drawWindow("Menu", 1, 2, 18, h - 2)
-    local contentWindow = window.create(term.current(), 20, 2, w - 20, h - 2)
-
-    -- Afficher le contenu initial
-    drawContent(contentWindow)
-    drawMenu(menuWindow)
-
+    drawUI()
     while true do
         local event, key = os.pullEvent("key")
         if key == keys.up then
@@ -81,17 +68,13 @@ local function mainLoop()
                 print("RTF OS ferme.")
                 break
             else
-                contentWindow.clear()
-                contentWindow.setTextColor(colors.lime)
-                contentWindow.setCursorPos(2, 2)
-                contentWindow.write("App lancée : " .. selected)
+                term.setCursorPos(20, 6)
+                term.setTextColor(colors.lime)
+                print("App lancee : " .. selected)
                 sleep(1)
             end
         end
-
-        -- Redessiner le menu et le contenu après chaque événement
-        drawMenu(menuWindow)
-        drawContent(contentWindow)
+        drawUI()
     end
 end
 
