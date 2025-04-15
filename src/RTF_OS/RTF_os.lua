@@ -1,64 +1,55 @@
 -- RTF_os.lua
--- UI principale de l'OS textuel RTF
+-- Interface principale de RTF OS
 
 local osName = "RTF OS"
-local osVersion = "v1.1.0"
+local osVersion = "v1.2.0"
 
--- Récupération des arguments du bootloader
+-- Recuperation des arguments (utilises plus tard si besoin)
 local args = {...}
 local platformId = args[1] or "Unknown"
 local platformName = args[2] or "Inconnue"
 
--- Liste des options du menu vertical
+-- Menu vertical
 local menuItems = {
     "Accueil",
     "Applications",
-    "Paramètres",
+    "Parametres",
     "Logs",
     "Quitter"
 }
 local selectedIndex = 1
 
--- Fonction pour dessiner l'interface utilisateur
+-- Dessiner l'interface
 local function drawUI()
     local w, h = term.getSize()
     term.clear()
 
-    -- Affichage du nom/version OS centré en haut
+    -- En-tete OS (centre)
     local header = osName .. " " .. osVersion
     local headerX = math.floor((w - #header) / 2)
     term.setCursorPos(headerX, 1)
     term.setTextColor(colors.yellow)
-    term.setBackgroundColor(colors.black)
     write(header)
 
-    -- Affichage de la plateforme (à droite)
-    local platformStr = "Sur : " .. platformName .. " (" .. platformId .. ")"
-    term.setCursorPos(w - #platformStr + 1, 1)
-    term.setTextColor(colors.gray)
-    write(platformStr)
-
-    -- Menu vertical à gauche
+    -- Menu vertical
     for i, item in ipairs(menuItems) do
         term.setCursorPos(2, i + 2)
         if i == selectedIndex then
-            term.setBackgroundColor(colors.blue)
-            term.setTextColor(colors.white)
+            term.setTextColor(colors.purple)
+            write("[" .. item .. "]")
         else
-            term.setBackgroundColor(colors.black)
             term.setTextColor(colors.lightGray)
+            write(" " .. item)
         end
-        write(item .. string.rep(" ", 16 - #item))
     end
 
-    -- Affichage de la "page" à droite
-    term.setBackgroundColor(colors.black)
+    -- Contenu page (titre seulement)
     term.setTextColor(colors.white)
     term.setCursorPos(20, 4)
-    print("Page sélectionnée : " .. menuItems[selectedIndex])
+    print("Page selectionnee : " .. menuItems[selectedIndex])
 end
 
--- Boucle principale d'interaction
+-- Boucle principale
 local function mainLoop()
     drawUI()
     while true do
@@ -74,13 +65,12 @@ local function mainLoop()
             if selected == "Quitter" then
                 term.clear()
                 term.setCursorPos(1, 1)
-                print("RTF OS fermé. À bientôt !")
+                print("RTF OS ferme.")
                 break
             else
-                -- Tu pourras mettre des `app.launch("Logs")` plus tard ici
                 term.setCursorPos(20, 6)
                 term.setTextColor(colors.lime)
-                print("App lancée : " .. selected)
+                print("App lancee : " .. selected)
                 sleep(1)
             end
         end
@@ -88,5 +78,5 @@ local function mainLoop()
     end
 end
 
--- Lancement de l'interface
+-- Lancer l'interface
 mainLoop()
