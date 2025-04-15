@@ -11,7 +11,7 @@ local platformName = args[2] or "Inconnue"
 
 -- Menu vertical
 local menuItems = {
-    "Accueil",
+    "Commande",
     "Applications",
     "Parametres",
     "Logs",
@@ -28,7 +28,7 @@ local function drawUI()
     local header = osName .. " " .. osVersion
     local headerX = math.floor((w - #header) / 2)
     term.setCursorPos(headerX, 1)
-    term.setTextColor(colors.yellow)
+    term.setTextColor(colors.cyan)
     write(header)
 
     -- Menu vertical
