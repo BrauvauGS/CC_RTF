@@ -18,9 +18,9 @@ function boot()
     term.setCursorPos(1, 1)
 
     term.setTextColor(colors.cyan)
-    print("***************************")
+    print("****************************")
     print("*  RTF Bootloader v" .. version .. "   *")
-    print("***************************")
+    print("****************************")
     term.setTextColor(colors.white)
 
     ConsolLog:log("S","Logger V".. ConsolLog:getVersion() .." loaded")
@@ -32,6 +32,12 @@ function boot()
     local success = h:downloadFile(osUrl, osPath)
     if success == true then
         ConsolLog:log("D","RTF_os dowloaded")
+        ConsolLog:log("S"," Run RTF OS")
+        for i = 1, 4 do
+            write(".")
+            sleep(0.8)
+        end
+        shell.run(osPath, platform.id, platform.name)
     else
         ConsolLog:log("E","RTF_os dowload")
     end

@@ -1,182 +1,92 @@
---[[term.clear()
-term.setCursorPos(1,1)]]
+-- RTF_os.lua
+-- UI principale de l'OS textuel RTF
 
--- Récupérer le nom de la plateforme passé en argument
-local args = { ... }
+local osName = "RTF OS"
+local osVersion = "v1.1.0"
 
-local OS_NAME = "RTF_OS"
-local OS_NAME_PROMPT = "RTF"
-local OS_VERSION = "0.1.6"
-local cwd = "/" -- Dossier courant
-local history = {} -- Historique des commandes
+-- Récupération des arguments du bootloader
+local args = {...}
+local platformId = args[1] or "Unknown"
+local platformName = args[2] or "Inconnue"
 
--- Fonction pour afficher la bannière
-local function showBanner()
-    term.setTextColor(colors.purple)
-    print("**********************")
-    print("*   ".. OS_NAME .. " " .. OS_VERSION .. "     *")
-    print("**********************")
-    write("ID:    ")
-    term.setTextColor(colors.cyan)
-    print("\" " .. os.getComputerID() .. " \"")
-    term.setTextColor(colors.purple)
-    write("LABEL: ")
-    term.setTextColor(colors.cyan)
-    if os.getComputerLabel() ~= nil then 
-        print("\" " .. os.getComputerLabel().." \"")
-    else 
-        print("\" " .. "not define".." \"")
-    end
-    term.setTextColor(colors.purple)
-    print()
-    term.setTextColor(colors.white)
+-- Liste des options du menu vertical
+local menuItems = {
+    "Accueil",
+    "Applications",
+    "Paramètres",
+    "Logs",
+    "Quitter"
+}
+local selectedIndex = 1
 
-    -- Affichage du nom de la plateforme
-    term.setTextColor(colors.green)
-   --local ID_platforme = args[1]
-    --local Name_platforme = args[2]
-    print("ID_platforme : "..args[1].."  Platform: " .. args[2])
-    term.setTextColor(colors.white)
+-- Fonction pour dessiner l'interface utilisateur
+local function drawUI()
+    local w, h = term.getSize()
+    term.clear()
 
-end
-
-local function drawPrompt()
-    term.setTextColor(colors.green)
-    write("[")
-
-    term.setTextColor(colors.purple)
-    write(OS_NAME_PROMPT)
-
-    term.setTextColor(colors.green)
-    write("]")
-
-    term.setTextColor(colors.cyan)
-    write(cwd)  -- Affiche le chemin complet du répertoire courant
-
-    term.setTextColor(colors.purple)
-    write(": ")
-    term.setTextColor(colors.white)
-end
-
-local function debug(pTexte)
+    -- Affichage du nom/version OS centré en haut
+    local header = osName .. " " .. osVersion
+    local headerX = math.floor((w - #header) / 2)
+    term.setCursorPos(headerX, 1)
     term.setTextColor(colors.yellow)
-    write("[DEBUG]: ")
+    term.setBackgroundColor(colors.black)
+    write(header)
+
+    -- Affichage de la plateforme (à droite)
+    local platformStr = "Sur : " .. platformName .. " (" .. platformId .. ")"
+    term.setCursorPos(w - #platformStr + 1, 1)
+    term.setTextColor(colors.gray)
+    write(platformStr)
+
+    -- Menu vertical à gauche
+    for i, item in ipairs(menuItems) do
+        term.setCursorPos(2, i + 2)
+        if i == selectedIndex then
+            term.setBackgroundColor(colors.blue)
+            term.setTextColor(colors.white)
+        else
+            term.setBackgroundColor(colors.black)
+            term.setTextColor(colors.lightGray)
+        end
+        write(item .. string.rep(" ", 16 - #item))
+    end
+
+    -- Affichage de la "page" à droite
+    term.setBackgroundColor(colors.black)
     term.setTextColor(colors.white)
-    print(pTexte)
+    term.setCursorPos(20, 4)
+    print("Page sélectionnée : " .. menuItems[selectedIndex])
 end
 
--- Fonction pour exécuter une commande
-local function runCommand(command)
-    -- Si la commande est vide, ne rien faire
-
-   
-    if command == "" then
-        
-        return true
-    end
-
-    table.insert(history, command) -- Ajoute à l'historique
-
-    local args = {}
-
-    for word in command:gmatch("%S+") do 
-        table.insert(args, word) 
-    end
-
-    if #args == 0 then 
-        return true 
-    end -- Si vide, ne rien faire
-
-    local cmd = args[1]
-    
-    if cmd == "ls" then
-        -- Liste les fichiers du dossier courant
-        local files = fs.list(cwd)
-        for _, file in ipairs(files) do
-            local fullPath = fs.combine(cwd, file)
-            if fs.isDir(fullPath) then
-                term.setTextColor(colors.cyan) -- Dossiers en violet
+-- Boucle principale d'interaction
+local function mainLoop()
+    drawUI()
+    while true do
+        local event, key = os.pullEvent("key")
+        if key == keys.up then
+            selectedIndex = selectedIndex - 1
+            if selectedIndex < 1 then selectedIndex = #menuItems end
+        elseif key == keys.down then
+            selectedIndex = selectedIndex + 1
+            if selectedIndex > #menuItems then selectedIndex = 1 end
+        elseif key == keys.enter then
+            local selected = menuItems[selectedIndex]
+            if selected == "Quitter" then
+                term.clear()
+                term.setCursorPos(1, 1)
+                print("RTF OS fermé. À bientôt !")
+                break
             else
-                term.setTextColor(colors.white) -- Fichiers en blanc
+                -- Tu pourras mettre des `app.launch("Logs")` plus tard ici
+                term.setCursorPos(20, 6)
+                term.setTextColor(colors.lime)
+                print("App lancée : " .. selected)
+                sleep(1)
             end
-            print(file)
         end
-        term.setTextColor(colors.white)
-
-    elseif cmd == "cd" then
-        -- Change de dossier
-        if args[2] then
-            local newDir = shell.resolve(args[2])
-            if fs.isDir(newDir) then
-                cwd = newDir  -- Met à jour le cwd avec le chemin absolu
-            else
-                term.setTextColor(colors.orange)
-                print("Dossier introuvable.")
-                term.setTextColor(colors.white)
-            end
-        else
-            term.setTextColor(colors.orange)
-            print("Usage: cd <dossier>")
-            term.setTextColor(colors.white)
-        end
-
-    elseif cmd == "clear" or cmd ==  "cls" then
-        -- Nettoie l'écran
-        term.clear()
-        term.setCursorPos(1,1)
-
-
-    elseif cmd == "exit" or cmd == "shutdown" then
-        -- Quitte le shell
-        print("\n")
-        print("Fermeture de " .. OS_NAME .. "...")
-        term.setTextColor(colors.purple)
-        for i = 10, 1, -1 do
-            sleep(0.1)
-            term.write("#")
-        end
-        os.shutdown()
-        return false
-
-    elseif cmd == "version" then
-        -- Quitte le shell
-        term.setTextColor(colors.cyan)
-        write(OS_NAME .. " " ..  OS_VERSION)
-        print("")
-        
-
-    elseif cmd == "reboot" then
-        -- Reboot OS
-        print("")
-        print(OS_NAME .. " Reboot")
-        term.setTextColor(colors.purple)
-        for i = 10, 1, -1 do
-            sleep(0.1)
-            term.write("#")
-        end
-        --shell.run("startup.lua")
-        os.reboot()
-
-    else
-        -- Tente d’exécuter un programme
-        if fs.exists(cmd) then
-
-            shell.run(cmd, table.unpack(args, 2))
-        else
-            term.setTextColor(colors.orange)
-            print("Commande inconnue : " .. cmd)
-            term.setTextColor(colors.white)
-        end
-    end
-    return true
-end
-
--- Lancement du shell
-showBanner()
-while true do
-    drawPrompt()
-    local input = read(nil, history) -- Active l'historique des commandes
-    if not runCommand(input) then   
-        break
+        drawUI()
     end
 end
+
+-- Lancement de l'interface
+mainLoop()

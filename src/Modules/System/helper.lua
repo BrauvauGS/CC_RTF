@@ -26,6 +26,11 @@ function Helper:new()
 
     return instance
 end
+
+function Helper:getVersion()
+    return self.version
+end
+
 -- Function to download a file from a URL and save it locally
 function Helper:downloadFile(url, destination)
     if not url or url == "" then
@@ -65,9 +70,7 @@ function Helper:downloadFile(url, destination)
     return true
 end
 
-function Helper:getVersion()
-    return self.version
-end
+
 
 function Helper:getPlatform()
     local isAdvanced = term.isColor()

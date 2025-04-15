@@ -1,15 +1,15 @@
 term.clear()
 term.setCursorPos(1, 1)
 
-local version = "1.0.0"
+local version = "1.1.0"
 local startTime = os.clock()
 local status = true
 
 
 term.setTextColor(colors.cyan)
-print("Downloader - Version " .. "[" .. version .. "]" )
+print("RTF instaler V" .. "[" .. version .. "]" )
 term.setTextColor(colors.magenta)
-print(">> RTF Download")
+print("RTF Download")
 term.setTextColor(colors.white)
 
 -- Ensure path exists
@@ -31,11 +31,11 @@ local function downloadModule(url, path)
         response.close()
 
         term.setTextColor(colors.green)
-        print(":) " .. path)
+        print("[ :) ] " .. path)
         term.setTextColor(colors.white)
     else
         term.setTextColor(colors.red)
-        print(":( " .. path)
+        print("[ :( ] " .. path)
         term.setTextColor(colors.white)
         status = false
     end
@@ -64,7 +64,7 @@ term.setTextColor(colors.white)
 -- Final action
 if status then
     term.setTextColor(colors.green)
-    write(">> Booting")
+    write("[Run bootloader]")
     for i = 1, 4 do
         write(".")
         sleep(0.8)
@@ -74,6 +74,6 @@ if status then
     shell.run("/RTF/bootloader.lua")
 else
     term.setTextColor(colors.red)
-    print(">> Error")
+    print("[Error]")
     term.setTextColor(colors.white)
 end
