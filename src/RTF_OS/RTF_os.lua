@@ -2,12 +2,7 @@
 -- Interface principale de RTF OS avec fenêtres (CC: Tweaked)
 
 local osName = "RTF OS"
-local osVersion = "v1.3.0"
-
--- Recuperation des arguments (utilises plus tard si besoin)
-local args = {...}
-local platformId = args[1] or "Unknown"
-local platformName = args[2] or "Inconnue"
+local osVersion = "v1.4.0"
 
 -- Menu vertical
 local menuItems = {
@@ -21,18 +16,23 @@ local selectedIndex = 1
 
 -- Fonction pour dessiner la fenêtre
 local function drawWindow(title, x, y, width, height)
-    local window = window.create(term.current(), x, y, width, height)
-    window.setBackgroundColor(colors.black)
-    window.setTextColor(colors.white)
-    window.clear()
+    -- Créer la fenêtre
+    local win = window.create(term.current(), x, y, width, height)
+    win.setBackgroundColor(colors.black)
+    win.setTextColor(colors.white)
+    win.clear()
 
     -- Titre de la fenêtre
-    window.setCursorPos(2, 1)
-    window.setTextColor(colors.cyan)
-    window.write(title)
+    win.setCursorPos(2, 1)
+    win.setTextColor(colors.cyan)
+    win.write(title)
 
-    -- Affichage du menu
-    window.setTextColor(colors.lightGray)
+    -- Retourner la fenêtre créée
+    return win
+end
+
+-- Fonction pour dessiner le menu dans la fenêtre
+local function drawMenu(window)
     for i, item in ipairs(menuItems) do
         window.setCursorPos(2, i + 2)
         if i == selectedIndex then
@@ -43,15 +43,14 @@ local function drawWindow(title, x, y, width, height)
             window.write(" " .. item)
         end
     end
-
-    return window
 end
 
--- Fonction pour dessiner le contenu (page) à droite
-local function drawContent(window, title)
+-- Fonction pour dessiner le contenu à droite
+local function drawContent(window)
+    window.clear()
     window.setTextColor(colors.white)
     window.setCursorPos(2, 2)
-    window.write("Page selectionnee : " .. title)
+    window.write("Page sélectionnée : " .. menuItems[selectedIndex])
 end
 
 -- Boucle principale
@@ -62,8 +61,9 @@ local function mainLoop()
     local menuWindow = drawWindow("Menu", 1, 2, 18, h - 2)
     local contentWindow = window.create(term.current(), 20, 2, w - 20, h - 2)
 
-    -- Afficher le titre de la page à droite
-    drawContent(contentWindow, menuItems[selectedIndex])
+    -- Afficher le contenu initial
+    drawContent(contentWindow)
+    drawMenu(menuWindow)
 
     while true do
         local event, key = os.pullEvent("key")
@@ -84,17 +84,14 @@ local function mainLoop()
                 contentWindow.clear()
                 contentWindow.setTextColor(colors.lime)
                 contentWindow.setCursorPos(2, 2)
-                contentWindow.write("App lancee : " .. selected)
+                contentWindow.write("App lancée : " .. selected)
                 sleep(1)
             end
         end
 
-        -- Redessiner la fenêtre de menu
-        menuWindow.clear()
-        drawWindow("Menu", 1, 2, 18, h - 2)
-        -- Redessiner le contenu de la page
-        contentWindow.clear()
-        drawContent(contentWindow, menuItems[selectedIndex])
+        -- Redessiner le menu et le contenu après chaque événement
+        drawMenu(menuWindow)
+        drawContent(contentWindow)
     end
 end
 
